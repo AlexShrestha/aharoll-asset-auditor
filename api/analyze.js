@@ -138,7 +138,7 @@ Respond ONLY in valid JSON (no markdown, no backticks):
       },
       body: JSON.stringify({
         model: 'gpt-5.1',
-        max_tokens: 2000,
+        max_completion_tokens: 2000,
         temperature: 0.1,
         messages: [
           {
