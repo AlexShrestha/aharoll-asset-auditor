@@ -96,7 +96,9 @@ export default function App() {
       setProgress({ current: i + 1, total: multi.length, status: `Analyzing: ${product.title.slice(0, 50)}...` })
 
       try {
-        const variantData = product.variants?.map(v => {
+        // Filter to only available variants
+        const availableVariants = (product.variants || []).filter(v => v.available !== false)
+        const variantData = availableVariants.map(v => {
           const dim = classifyVariantDimension(v.option1)
           return {
             title: v.title, option1: v.option1, option2: v.option2, option3: v.option3,
@@ -216,6 +218,8 @@ export default function App() {
               </div>
             ) : (
               <div>
+                <label style={labelStyle}>Store URL <span style={{ color: '#52525b' }}>(for product links)</span></label>
+                <input type="text" placeholder="brand.com" value={storeUrl} onChange={e => setStoreUrl(e.target.value)} style={{ ...inputStyle, marginBottom: 12 }} />
                 <label style={labelStyle}>Paste products.json</label>
                 <textarea placeholder='{"products": [...]}' value={jsonText} onChange={e => setJsonText(e.target.value)} style={{ ...inputStyle, height: 180, resize: 'vertical', fontFamily: "'SF Mono', monospace", fontSize: 12 }} />
                 <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
@@ -354,7 +358,7 @@ function ProductCard({ r, storeUrl }) {
               : r.product.title}
           </div>
           <div style={{ fontSize: 12, color: '#71717a', marginTop: 2 }}>
-            {r.product.images?.length} images · {r.product.variants?.length || 0} variants
+            {r.product.images?.length} images · {r.product.variants?.filter(v => v.available !== false).length || 0}/{r.product.variants?.length || 0} variants available
             {r.analysis.detected_category && <span style={{ color: '#52525b' }}> · {r.analysis.detected_category}</span>}
             {r.product.variants?.length > 1 && (
               <span style={{ color: '#52525b' }}>
@@ -362,7 +366,7 @@ function ProductCard({ r, storeUrl }) {
               </span>
             )}
           </div>
-          {productUrl && <a href={productUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: '#6366f1', textDecoration: 'none' }}>View product →</a>}
+          {productUrl && <a href={productUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: '#6366f1', textDecoration: 'underline' }}>{productUrl}</a>}
         </div>
         <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: sev.text, background: `${sev.text}20`, padding: '3px 8px', borderRadius: 4, height: 'fit-content' }}>{r.analysis.severity}</span>
       </div>
