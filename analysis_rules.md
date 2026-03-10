@@ -22,6 +22,7 @@ Overall severity is determined only by visual merchandising and asset coverage p
 - SEO issues must not raise or determine the overall severity.
 - If the only issues are SEO or metadata issues, overall severity should be `low`.
 - If there are no issues, overall severity should be `none`.
+- Performance checks for page load time and image payload are evaluated separately and can raise severity because they directly affect page functionality.
 
 ### Critical
 
@@ -63,6 +64,27 @@ Use for minor issues that do not materially affect understanding.
 3. Minor background inconsistency.
 4. Metadata polish issues.
 5. SEO-only or accessibility-only problems with otherwise strong imagery.
+
+## Performance Checks
+
+These checks are deterministic and are appended after the vision analysis.
+
+### Page Load Time
+
+- `high`: product page load time is `>= 8000 ms`
+- `medium`: product page load time is `>= 4000 ms`
+- `low`: product page load time is `>= 2500 ms`
+
+### Image Payload Size
+
+- `high`: total measured image payload is `>= 12 MB` or the largest measured image is `>= 3 MB`
+- `medium`: total measured image payload is `>= 5 MB` or the largest measured image is `>= 1.5 MB`
+- `low`: total measured image payload is `>= 2.5 MB`
+
+These performance findings should be included as inconsistency entries with types:
+
+- `page_load`
+- `image_size`
 
 ### Info
 

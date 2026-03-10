@@ -16,6 +16,7 @@ const ISSUE_ICONS = {
   quality_mismatch: '📸', no_model: '🚫', model_inconsistency: '👤',
   brand_deviation: '⚠️', seo: '🔍', seo_alt_text: '🔍', seo_filenames: '🔍',
   seo_format: '🔍', seo_gallery_order: '📋', duplicate: '♻️', resolution: '🖼',
+  page_load: '⏱️', image_size: '🗜️',
   gallery_order: '📋', size_info: 'ℹ️', size_only: 'ℹ️', variant_integrity: '🏷️',
   missing_detail: '🔬', missing_hero: '⭐', wrong_variant_media: '❌',
   missing_model: '🚫', variant_ambiguity: '🏷️', missing_category: '📐',
@@ -73,6 +74,19 @@ function downloadFile(filename, content, mimeType) {
   a.click()
   a.remove()
   URL.revokeObjectURL(url)
+}
+
+function formatBytes(bytes) {
+  if (bytes == null || Number.isNaN(bytes)) return 'n/a'
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+}
+
+function formatDuration(ms) {
+  if (ms == null || Number.isNaN(ms)) return 'n/a'
+  if (ms < 1000) return `${Math.round(ms)} ms`
+  return `${(ms / 1000).toFixed(2)} s`
 }
 
 function normalizeIssueEntry(entry, fallbackSeverity, forcedType) {
@@ -199,6 +213,7 @@ export default function App() {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             title: product.title,
+            productUrl: getProductUrl(storeUrl, product),
             imageUrls: product.images.slice(0, 10).map(img => img.src),
             variants: variantData.length > 1 ? variantData : undefined,
             productType: product.product_type || undefined,
@@ -238,6 +253,7 @@ export default function App() {
       missing: entry.analysis?.missing || [],
       scores: entry.analysis?.scores || null,
       images: entry.analysis?.images || [],
+      performance: entry.analysis?.performance || null,
       error: entry.error || null,
     })
 
@@ -802,6 +818,17 @@ function ProductCard({ r, storeUrl }) {
 
       <div style={{ fontSize: 13, color: '#a1a1aa', fontStyle: 'italic', marginBottom: 12 }}>{r.analysis.summary}</div>
 
+      {r.analysis.performance && (
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+          <span style={{ fontSize: 11, color: '#d4d4d8', background: '#18181b', border: '1px solid #27272a', borderRadius: 999, padding: '4px 8px' }}>
+            Load {formatDuration(r.analysis.performance.pageLoadMs)}
+          </span>
+          <span style={{ fontSize: 11, color: '#d4d4d8', background: '#18181b', border: '1px solid #27272a', borderRadius: 999, padding: '4px 8px' }}>
+            Images {formatBytes(r.analysis.performance.totalImageBytes)}
+          </span>
+        </div>
+      )}
+
       {allIssues.map((issue, j) => {
         const icon = ISSUE_ICONS[issue.type] || '▸'
         const issueSev = SEV[issue.severity] || sev
@@ -925,6 +952,17 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats, categor
               </div>
 
               <div style={{ fontSize: 12, color: '#555', fontStyle: 'italic', marginBottom: 8 }}>{r.analysis.summary}</div>
+
+              {r.analysis.performance && (
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+                  <span style={{ fontSize: 10, color: '#444', background: '#fff', border: '1px solid #ddd6fe', borderRadius: 999, padding: '4px 8px' }}>
+                    Load {formatDuration(r.analysis.performance.pageLoadMs)}
+                  </span>
+                  <span style={{ fontSize: 10, color: '#444', background: '#fff', border: '1px solid #ddd6fe', borderRadius: 999, padding: '4px 8px' }}>
+                    Images {formatBytes(r.analysis.performance.totalImageBytes)}
+                  </span>
+                </div>
+              )}
 
               {allIssues.map((issue, j) => {
                 const issueSev = SEV[issue.severity] || sev
