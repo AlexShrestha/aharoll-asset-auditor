@@ -1,3 +1,9 @@
+function isProductAvailable(product) {
+  if (product?.available === true) return true;
+  if (product && Object.prototype.hasOwnProperty.call(product, 'available')) return false;
+  return Array.isArray(product?.variants) && product.variants.some((variant) => variant.available === true);
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -63,11 +69,14 @@ export default async function handler(req, res) {
       if (usedCursor) page++;
     }
 
+    const availableProducts = allProducts.filter(isProductAvailable);
+
     return res.status(200).json({
-      products: allProducts,
+      products: availableProducts,
       storeBaseUrl: baseUrl,
       meta: {
-        total: allProducts.length,
+        total: availableProducts.length,
+        fetched: allProducts.length,
         pages: page,
         pagination: usedCursor ? 'cursor' : 'page',
       },
