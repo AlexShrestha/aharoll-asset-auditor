@@ -544,25 +544,58 @@ export default function App() {
         {/* LOADED */}
         {phase === 'loaded' && (
           <div>
+            <div style={{ background: 'linear-gradient(180deg, #12091b, #0f0f13)', border: '1px solid #2a1b3d', borderRadius: 18, padding: '20px 20px 18px', marginBottom: 28 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#a78bfa', marginBottom: 10 }}>
+                Step 1
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'flex-start', marginBottom: 16, flexWrap: 'wrap' }}>
+                <div>
+                  <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 6 }}>Choose category scope first</h2>
+                  <div style={{ color: '#a1a1aa', fontSize: 14 }}>
+                    {products.length} available products loaded across {categories.length - 1} categories
+                  </div>
+                </div>
+                <div style={{ minWidth: 220, background: '#140f1c', border: '1px solid #312042', borderRadius: 12, padding: '12px 14px' }}>
+                  <div style={{ fontSize: 11, color: '#8b5cf6', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Current scope</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#f5f3ff' }}>{category === 'all' ? 'All categories' : category}</div>
+                  <div style={{ fontSize: 12, color: '#8a7ca2', marginTop: 4 }}>{filteredProducts.length} products · {scopedAnalyzableProducts.length} analyzable</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {categories.map(option => {
+                  const selected = option === category
+                  const count = option === 'all' ? products.length : products.filter(p => getProductCategory(p) === option).length
+                  const analyzableCount = option === 'all'
+                    ? products.filter(p => p.images?.length > 1).length
+                    : products.filter(p => getProductCategory(p) === option && p.images?.length > 1).length
+
+                  return (
+                    <button
+                      key={option}
+                      onClick={() => setCategory(option)}
+                      style={{
+                        ...btn,
+                        padding: '12px 14px',
+                        minWidth: 170,
+                        textAlign: 'left',
+                        background: selected ? 'linear-gradient(135deg, #6d28d9, #9333ea)' : '#141419',
+                        border: selected ? '1px solid #c084fc' : '1px solid #26262f',
+                        color: '#fff',
+                      }}
+                    >
+                      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{option === 'all' ? 'All categories' : option}</div>
+                      <div style={{ fontSize: 11, color: selected ? '#ede9fe' : '#8b8b98' }}>{count} products</div>
+                      <div style={{ fontSize: 11, color: selected ? '#ddd6fe' : '#6b7280', marginTop: 2 }}>{analyzableCount} with multiple images</div>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+
             <div style={{ marginBottom: 24 }}>
               <div style={{ fontSize: 48, fontWeight: 800, letterSpacing: '-0.04em' }}>{filteredProducts.length}</div>
               <div style={{ color: '#71717a', fontSize: 14 }}>
                 available products in scope · <span style={{ color: '#a1a1aa' }}>{scopedAnalyzableProducts.length} with multiple images</span>
-              </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 12, marginBottom: 24 }}>
-              <div style={{ background: '#111114', border: '1px solid #1e1e24', borderRadius: 10, padding: 14 }}>
-                <label style={labelStyle}>Category scope</label>
-                <select value={category} onChange={e => setCategory(e.target.value)} style={{ ...inputStyle, appearance: 'none' }}>
-                  {categories.map(option => (
-                    <option key={option} value={option}>{option === 'all' ? 'All categories' : option}</option>
-                  ))}
-                </select>
-              </div>
-              <div style={{ background: '#111114', border: '1px solid #1e1e24', borderRadius: 10, padding: 14 }}>
-                <div style={{ fontSize: 12, color: '#71717a', marginBottom: 6 }}>Scope summary</div>
-                <div style={{ fontSize: 22, fontWeight: 800, color: '#e4e4e7' }}>{categories.length - 1}</div>
-                <div style={{ fontSize: 12, color: '#71717a' }}>categories available · current scope: {category === 'all' ? 'all categories' : category}</div>
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 6, marginBottom: 28, maxHeight: 340, overflowY: 'auto', padding: 2 }}>
