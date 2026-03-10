@@ -75,6 +75,39 @@ function downloadFile(filename, content, mimeType) {
   URL.revokeObjectURL(url)
 }
 
+function normalizeIssueEntry(entry, fallbackSeverity, forcedType) {
+  if (typeof entry === 'string') {
+    const detail = entry.trim()
+    if (!detail) return null
+    return { type: forcedType || 'other', severity: fallbackSeverity, detail }
+  }
+
+  if (!entry || typeof entry !== 'object') return null
+
+  const detail = typeof entry.detail === 'string'
+    ? entry.detail.trim()
+    : typeof entry.message === 'string'
+      ? entry.message.trim()
+      : ''
+
+  if (!detail) return null
+
+  return {
+    ...entry,
+    type: forcedType || entry.type || 'other',
+    severity: entry.severity || fallbackSeverity,
+    detail,
+  }
+}
+
+function collectIssues(analysis) {
+  if (!analysis) return []
+  return [
+    ...(analysis.inconsistencies || []).map((entry) => normalizeIssueEntry(entry, analysis.severity)),
+    ...(analysis.seo_issues || []).map((entry) => normalizeIssueEntry(entry, 'low', 'seo')),
+  ].filter(Boolean)
+}
+
 export default function App() {
   const [storeUrl, setStoreUrl] = useState('')
   const [products, setProducts] = useState([])
@@ -299,15 +332,19 @@ export default function App() {
         if (issue.inconsistencies.length) {
           sections.push('- Findings:')
           issue.inconsistencies.forEach((entry) => {
-            const detail = typeof entry === 'string' ? entry : entry.detail
-            const severity = typeof entry === 'string' ? issue.severity : entry.severity
+            const normalized = normalizeIssueEntry(entry, issue.severity)
+            if (!normalized) return
+            const detail = normalized.detail
+            const severity = normalized.severity
             sections.push(`  - [${severity}] ${detail}`)
           })
         }
         if (issue.seoIssues.length) {
           sections.push('- SEO:')
           issue.seoIssues.forEach((entry) => {
-            const detail = typeof entry === 'string' ? entry : entry.detail
+            const normalized = normalizeIssueEntry(entry, 'low', 'seo')
+            if (!normalized) return
+            const detail = normalized.detail
             sections.push(`  - ${detail}`)
           })
         }
@@ -343,17 +380,18 @@ export default function App() {
     try {
       const data = buildReportData()
       const rows = data.issues.map((issue) => {
-        const findings = issue.inconsistencies.map((entry) => {
-          const detail = typeof entry === 'string' ? entry : entry.detail
-          const severity = typeof entry === 'string' ? issue.severity : entry.severity
-          return `<li><strong>${escapeHtml(severity || '')}</strong> ${escapeHtml(detail || '')}</li>`
-        }).join('')
-        const seo = issue.seoIssues.map((entry) => {
-          const detail = typeof entry === 'string' ? entry : entry.detail
-          return `<li>${escapeHtml(detail || '')}</li>`
-        }).join('')
+        const findings = issue.inconsistencies
+          .map((entry) => normalizeIssueEntry(entry, issue.severity))
+          .filter(Boolean)
+          .map((entry) => `<li><strong>${escapeHtml(entry.severity || '')}</strong> ${escapeHtml(entry.detail || '')}</li>`)
+          .join('')
+        const seo = issue.seoIssues
+          .map((entry) => normalizeIssueEntry(entry, 'low', 'seo'))
+          .filter(Boolean)
+          .map((entry) => `<li>${escapeHtml(entry.detail || '')}</li>`)
+          .join('')
         return `
-          <section class="card severity-${escapeHtml(issue.severity)}">
+          <section class="card severity-${escapeHtml(issue.severity)}" data-severity="${escapeHtml(issue.severity || 'none')}">
             <div class="card-header">
               <div>
                 <h3>${escapeHtml(issue.title)}</h3>
@@ -387,6 +425,9 @@ export default function App() {
     body { font-family: Inter, Arial, sans-serif; margin: 0; background: #f5f3ff; color: #1f2937; }
     main { max-width: 980px; margin: 0 auto; padding: 32px 20px 64px; }
     .hero { background: linear-gradient(135deg, #581c87, #7e22ce); color: white; padding: 28px; border-radius: 16px; }
+    .toolbar { display: flex; gap: 12px; align-items: center; margin: 20px 0 16px; flex-wrap: wrap; }
+    .toolbar label { font-size: 14px; font-weight: 600; color: #4c1d95; }
+    .toolbar select { border: 1px solid #d8b4fe; background: white; color: #1f2937; border-radius: 10px; padding: 10px 12px; font-size: 14px; }
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 20px 0 28px; }
     .stat, .card { background: white; border: 1px solid #e9d5ff; border-radius: 14px; padding: 16px; }
     .stat strong { display: block; font-size: 28px; color: #7e22ce; }
@@ -415,6 +456,16 @@ export default function App() {
       <div class="stat"><strong>${data.stats.low}</strong><span>Low</span></div>
       <div class="stat"><strong>${data.clean.length + data.infoOnly.length}</strong><span>Clean</span></div>
     </section>
+    <section class="toolbar">
+      <label for="severity-filter">Severity filter</label>
+      <select id="severity-filter">
+        <option value="all">All severities</option>
+        <option value="critical">Critical</option>
+        <option value="high">High</option>
+        <option value="medium">Medium</option>
+        <option value="low">Low</option>
+      </select>
+    </section>
     <section>
       <h2>Issues</h2>
       ${rows || '<p>No actionable issues found.</p>'}
@@ -428,6 +479,18 @@ export default function App() {
       ${failedRows ? `<ul>${failedRows}</ul>` : '<p>None</p>'}
     </section>
   </main>
+  <script>
+    const filter = document.getElementById('severity-filter');
+    const cards = Array.from(document.querySelectorAll('[data-severity]'));
+    if (filter) {
+      filter.addEventListener('change', function () {
+        const value = filter.value;
+        cards.forEach((card) => {
+          card.style.display = value === 'all' || card.dataset.severity === value ? '' : 'none';
+        });
+      });
+    }
+  </script>
 </body>
 </html>`
 
@@ -697,10 +760,7 @@ export default function App() {
 function ProductCard({ r, storeUrl }) {
   const sev = SEV[r.analysis.severity] || SEV.medium
   const productUrl = getProductUrl(storeUrl, r.product)
-  const allIssues = [
-    ...(r.analysis.inconsistencies || []).map(i => typeof i === 'string' ? { type: 'other', severity: r.analysis.severity, detail: i } : i),
-    ...(r.analysis.seo_issues || []).map(i => ({ ...i, type: 'seo' })),
-  ]
+  const allIssues = collectIssues(r.analysis)
 
   return (
     <div style={{ background: sev.bg, border: `1px solid ${sev.border}`, borderRadius: 12, padding: 20, marginBottom: 12 }}>
@@ -836,10 +896,7 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats, categor
         {issues.map((r, i) => {
           const sev = SEV[r.analysis.severity] || SEV.medium
           const productUrl = getProductUrl(storeUrl, r.product)
-          const allIssues = [
-            ...(r.analysis.inconsistencies || []).map(x => typeof x === 'string' ? { type: 'other', severity: r.analysis.severity, detail: x } : x),
-            ...(r.analysis.seo_issues || []).map(x => ({ ...x, type: 'seo' })),
-          ]
+          const allIssues = collectIssues(r.analysis)
 
           return (
             <div key={i} style={{ background: sev.light, border: `1px solid ${sev.lborder}`, borderRadius: 10, padding: 20, marginBottom: 12, pageBreakInside: 'avoid' }}>

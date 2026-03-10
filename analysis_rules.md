@@ -16,6 +16,13 @@ Each image is classified with:
 
 ## Severity Rules
 
+Overall severity is determined only by visual merchandising and asset coverage problems.
+
+- SEO, accessibility, alt text, filename, format, and metadata issues must always be reported.
+- SEO issues must not raise or determine the overall severity.
+- If the only issues are SEO or metadata issues, overall severity should be `low`.
+- If there are no issues, overall severity should be `none`.
+
 ### Critical
 
 Use only for issues that create product confusion or wrong variant presentation.
@@ -25,8 +32,6 @@ Use only for issues that create product confusion or wrong variant presentation.
 3. No usable hero image for a visual variant.
 4. Buyable variant has zero media.
 5. Variant ambiguity caused by gallery reuse across visually different variants.
-6. All key images missing alt text.
-7. Alt text references the wrong variant.
 
 ### High
 
@@ -36,9 +41,6 @@ Use when the product is purchasable but coverage is weak and conversion risk is 
 2. Missing detail shot.
 3. Missing model or on-body imagery for fit-dependent products.
 4. Missing category-specific coverage.
-5. Duplicate alt text across all gallery images.
-6. Poor filenames such as machine-generated names.
-7. Poor image format or size choices.
 
 ### Medium
 
@@ -60,6 +62,7 @@ Use for minor issues that do not materially affect understanding.
 2. One angle weaker than the rest.
 3. Minor background inconsistency.
 4. Metadata polish issues.
+5. SEO-only or accessibility-only problems with otherwise strong imagery.
 
 ### Info
 
