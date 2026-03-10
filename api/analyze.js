@@ -50,6 +50,13 @@ CLASSIFY each image (index 0 to ${imageContent.length - 1}):
 - shows_detail: true/false (zippers, texture, hardware, stitching, lace, embroidery, closures)
 - variant_guess: which variant this image likely belongs to (color/pattern name)
 
+=== SEVERITY DECISION POLICY (FOLLOW EXACTLY) ===
+
+The overall "severity" must be determined ONLY from visual merchandising and asset coverage problems.
+SEO, accessibility, alt text, filename, format, and gallery-order problems must ALWAYS be reported, but they must NOT raise or determine the overall severity.
+If the only problems are SEO or metadata problems, set overall severity to "low" unless there are no issues at all, in which case use "none".
+Never return "critical" or "high" based only on SEO/accessibility problems.
+
 === SEVERITY RULES (FOLLOW EXACTLY) ===
 
 CRITICAL - use ONLY for issues that create product confusion or wrong variant presentation:
@@ -58,17 +65,12 @@ CRITICAL - use ONLY for issues that create product confusion or wrong variant pr
 3. NO USABLE HERO IMAGE: A visual variant exists but has no clear front-facing/hero product image (only closeups or back views).
 4. BUYABLE VARIANT HAS ZERO MEDIA: In-stock variant opens empty gallery or has no valid images.
 5. VARIANT AMBIGUITY: Two+ visually different variants reuse the same gallery. Customer cannot distinguish options visually.
-6. ALL KEY IMAGES MISSING ALT TEXT: All primary product images have empty alt text (accessibility failure).
-7. ALT TEXT REFERENCES WRONG VARIANT: Alt says "Black dress" but image shows Burgundy.
 
 HIGH - product is purchasable but coverage is weak, conversion risk is high:
 1. MISSING SUPPORTING ANGLES: No back view, no side view, no 3/4 where relevant.
 2. MISSING DETAIL SHOT: Lace, sequins, embroidery, fabric texture, zipper, buttons, hardware not shown on a premium/detailed product.
 3. MISSING MODEL/ON-BODY: Fit-dependent category (dress, top, coat, pants, shoes) lacks model shot.
 4. MISSING CATEGORY-SPECIFIC COVERAGE: Shoes without sole view. Bags without inside view. Furniture without context shot.
-5. DUPLICATE ALT TEXT: All gallery images use identical alt text with no angle/detail differentiation.
-6. POOR FILENAMES: Machine-generated names like IMG_4488.jpg, final-final.png, screenshot.webp.
-7. POOR IMAGE FORMAT/SIZE: Photographic images using PNG unnecessarily. No WebP. Oversized files.
 
 MEDIUM - affects quality or conversion but does NOT cause product confusion:
 1. Repetitive/near-duplicate images in gallery.
@@ -84,6 +86,7 @@ LOW - minor issues that don't materially affect understanding:
 2. One angle weaker than rest.
 3. Minor background inconsistency.
 4. Metadata polish issues.
+5. SEO-only or accessibility-only problems with otherwise strong imagery.
 
 INFO - acceptable omissions, NOT gaps:
 1. SIZE-ONLY VARIANTS SHARING IMAGES: XS/S/M/L/XL sharing one image set is ACCEPTABLE when appearance doesn't change. Do NOT flag this as critical or high. Mark as info.
@@ -109,13 +112,15 @@ Also evaluate:
 - Gallery ordering (hero first?)
 - Image quality issues visible (blurry, watermarks, screenshots, low-res)
 
+SEO findings must be listed in "seo_issues". They may also appear in "missing" when useful, but they must not control the overall "severity".
+Do not duplicate SEO findings as blank or partial entries.
+
 Respond ONLY in valid JSON (no markdown, no backticks):
 {
   "images": [{"index": 0, "has_model": true, "angle": "front", "background": "white", "quality": "professional", "crop_style": "full_body", "shows_detail": false, "variant_guess": "black", "brief": "model wearing black version, white studio, front view"}],
   "inconsistencies": [
     {"type": "variant_coverage", "severity": "critical", "detail": "Burgundy variant has no dedicated gallery. Customers may see the wrong product before purchase."},
     {"type": "missing_angles", "severity": "high", "detail": "Black variant lacks back and detail views."},
-    {"type": "seo_alt_text", "severity": "high", "detail": "All 6 images use identical alt text with no angle differentiation."},
     {"type": "size_only", "severity": "info", "detail": "XS, S, M, L share images. No action required - appearance unchanged across sizes."}
   ],
   "severity": "critical" | "high" | "medium" | "low" | "info" | "none",
