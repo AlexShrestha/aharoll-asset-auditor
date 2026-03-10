@@ -3,7 +3,7 @@ import { useState, useRef } from 'react'
 const BATCH_DELAY = 1500
 
 const SEV = {
-  critical: { bg: '#1c0505', text: '#ef4444', border: '#991b1b', light: '#fef2f2', ltext: '#991b1b', lborder: '#fecaca' },
+  critical: { bg: '#14091f', text: '#c084fc', border: '#7e22ce', light: '#faf5ff', ltext: '#7e22ce', lborder: '#e9d5ff' },
   high:     { bg: '#1c0808', text: '#f87171', border: '#7f1d1d', light: '#fff1f2', ltext: '#be123c', lborder: '#fda4af' },
   medium:   { bg: '#1c0f05', text: '#fb923c', border: '#9a3412', light: '#fff7ed', ltext: '#9a3412', lborder: '#fed7aa' },
   low:      { bg: '#1a1a0a', text: '#facc15', border: '#854d0e', light: '#fefce8', ltext: '#854d0e', lborder: '#fde68a' },
@@ -36,16 +36,56 @@ function getProductUrl(storeUrl, product) {
   return `${getStoreBaseUrl(storeUrl)}/products/${handle}`
 }
 
+function getProductCategory(product) {
+  return (product?.product_type || '').trim() || 'Uncategorized'
+}
+
+function isProductAvailable(product) {
+  if (product?.available === true) return true
+  if (product && Object.prototype.hasOwnProperty.call(product, 'available')) return false
+  return Array.isArray(product?.variants) && product.variants.some(v => v.available === true)
+}
+
+function filterAvailableProducts(products) {
+  return Array.isArray(products) ? products.filter(isProductAvailable) : []
+}
+
+function slugify(value) {
+  return (value || 'report').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'report'
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+function downloadFile(filename, content, mimeType) {
+  const blob = new Blob([content], { type: mimeType })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
+}
+
 export default function App() {
   const [storeUrl, setStoreUrl] = useState('')
   const [products, setProducts] = useState([])
+  const [category, setCategory] = useState('all')
   const [phase, setPhase] = useState('input')
   const [results, setResults] = useState([])
   const [progress, setProgress] = useState({ current: 0, total: 0, status: '' })
   const [error, setError] = useState('')
   const [showJson, setShowJson] = useState(false)
   const [jsonText, setJsonText] = useState('')
-  const [exporting, setExporting] = useState(false)
+  const [exportingFormat, setExportingFormat] = useState('')
   const abortRef = useRef(false)
   const accRef = useRef([])
   const reportRef = useRef(null)
@@ -59,10 +99,11 @@ export default function App() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to fetch')
-      if (!data.products?.length) throw new Error('No products found')
+      const availableProducts = filterAvailableProducts(data.products)
+      if (!availableProducts.length) throw new Error('No available products found')
       // Use resolved URL from server (handles https:// normalization)
       if (data.storeBaseUrl) setStoreUrl(data.storeBaseUrl)
-      setProducts(data.products); setPhase('loaded')
+      setProducts(availableProducts); setCategory('all'); setPhase('loaded')
     } catch (e) {
       setError(e.message); setShowJson(true); setPhase('input')
     }
@@ -73,8 +114,10 @@ export default function App() {
       const data = JSON.parse(jsonText)
       const prods = data.products || data
       if (!Array.isArray(prods) || !prods.length) throw new Error('Invalid or empty products')
-      setProducts(prods); setPhase('loaded'); setError('')
-    } catch (e) { setError('Invalid JSON: ' + e.message) }
+      const availableProducts = filterAvailableProducts(prods)
+      if (!availableProducts.length) throw new Error('No available products found')
+      setProducts(availableProducts); setCategory('all'); setPhase('loaded'); setError('')
+    } catch (e) { setError(e.message) }
   }
 
   // Classify variant dimension as visual or non-visual
@@ -90,7 +133,7 @@ export default function App() {
 
   const analyze = async () => {
     setPhase('analyzing'); abortRef.current = false; accRef.current = []
-    const multi = products.filter(p => p.images?.length > 1)
+    const multi = filteredProducts.filter(p => p.images?.length > 1)
     setProgress({ current: 0, total: multi.length, status: 'Starting...' })
 
     if (!multi.length) { setError('No products with multiple images.'); setPhase('loaded'); return }
@@ -143,28 +186,269 @@ export default function App() {
   }
 
   const stop = () => { abortRef.current = true; setPhase('results') }
-  const reset = () => { setProducts([]); setPhase('input'); setResults([]); setProgress({ current: 0, total: 0, status: '' }); setError(''); accRef.current = [] }
+  const reset = () => { setProducts([]); setCategory('all'); setPhase('input'); setResults([]); setProgress({ current: 0, total: 0, status: '' }); setError(''); accRef.current = [] }
+
+  const buildReportData = () => {
+    const generatedAt = new Date().toISOString()
+    const selectedCategory = category === 'all' ? 'All categories' : category
+    const enrich = (entry) => ({
+      title: entry.product.title,
+      category: getProductCategory(entry.product),
+      productUrl: getProductUrl(storeUrl, entry.product),
+      imageCount: entry.product.images?.length || 0,
+      availableVariantCount: entry.product.variants?.filter(v => v.available === true).length || 0,
+      handle: entry.product.handle || null,
+      summary: entry.analysis?.summary || null,
+      severity: entry.analysis?.severity || null,
+      inconsistencies: entry.analysis?.inconsistencies || [],
+      seoIssues: entry.analysis?.seo_issues || [],
+      missing: entry.analysis?.missing || [],
+      scores: entry.analysis?.scores || null,
+      images: entry.analysis?.images || [],
+      error: entry.error || null,
+    })
+
+    return {
+      app: 'AhaRoll Asset Consistency Auditor',
+      generatedAt,
+      storeUrl: getStoreBaseUrl(storeUrl),
+      selectedCategory,
+      totalAvailableProducts: products.length,
+      totalScopedProducts: filteredProducts.length,
+      analyzedProducts: results.length,
+      actionableProducts: sorted.length,
+      stats,
+      issues: sorted.map(enrich),
+      clean: clean.map(enrich),
+      infoOnly: infoOnly.map(enrich),
+      errors: errors.map(enrich),
+    }
+  }
 
   const exportPdf = async () => {
-    setExporting(true)
+    setExportingFormat('pdf')
     try {
       const html2pdf = (await import('html2pdf.js')).default
       const el = reportRef.current; if (!el) return
       const storeName = storeUrl ? storeUrl.replace(/https?:\/\//, '').replace(/\..*/,'') : 'store'
+      const categorySuffix = category === 'all' ? 'all-categories' : slugify(category)
       await html2pdf().set({
         margin: [10, 10, 10, 10],
-        filename: `aharoll-audit-${storeName}-${new Date().toISOString().slice(0,10)}.pdf`,
+        filename: `aharoll-audit-${storeName}-${categorySuffix}-${new Date().toISOString().slice(0,10)}.pdf`,
         image: { type: 'jpeg', quality: 0.9 },
         html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false, imageTimeout: 15000 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
       }).from(el).save()
     } catch (e) { setError('PDF export failed: ' + e.message) }
-    finally { setExporting(false) }
+    finally { setExportingFormat('') }
+  }
+
+  const exportJson = () => {
+    setExportingFormat('json')
+    try {
+      const data = buildReportData()
+      const storeName = storeUrl ? storeUrl.replace(/https?:\/\//, '').replace(/\..*/, '') : 'store'
+      downloadFile(
+        `aharoll-audit-${storeName}-${category === 'all' ? 'all-categories' : slugify(category)}-${new Date().toISOString().slice(0, 10)}.json`,
+        JSON.stringify(data, null, 2),
+        'application/json'
+      )
+    } catch (e) {
+      setError('JSON export failed: ' + e.message)
+    } finally {
+      setExportingFormat('')
+    }
+  }
+
+  const exportMarkdown = () => {
+    setExportingFormat('md')
+    try {
+      const data = buildReportData()
+      const storeName = data.storeUrl || 'Store'
+      const sections = [
+        '# Asset & SEO Audit Report',
+        '',
+        `- Store: ${storeName}`,
+        `- Category: ${data.selectedCategory}`,
+        `- Generated: ${data.generatedAt}`,
+        `- Available products: ${data.totalAvailableProducts}`,
+        `- Scoped products: ${data.totalScopedProducts}`,
+        `- Analyzed products: ${data.analyzedProducts}`,
+        '',
+        '## Severity Summary',
+        '',
+        `- Critical: ${data.stats.critical}`,
+        `- High: ${data.stats.high}`,
+        `- Medium: ${data.stats.medium}`,
+        `- Low: ${data.stats.low}`,
+        `- Clean: ${data.clean.length + data.infoOnly.length}`,
+        '',
+        '## Issues',
+        '',
+      ]
+
+      if (!data.issues.length) sections.push('No actionable issues found.', '')
+      data.issues.forEach((issue, index) => {
+        sections.push(`### ${index + 1}. ${issue.title}`)
+        sections.push(`- Severity: ${issue.severity}`)
+        sections.push(`- Category: ${issue.category}`)
+        sections.push(`- Product URL: ${issue.productUrl || 'N/A'}`)
+        sections.push(`- Summary: ${issue.summary || 'N/A'}`)
+        if (issue.missing.length) sections.push(`- Missing: ${issue.missing.join(' | ')}`)
+        if (issue.inconsistencies.length) {
+          sections.push('- Findings:')
+          issue.inconsistencies.forEach((entry) => {
+            const detail = typeof entry === 'string' ? entry : entry.detail
+            const severity = typeof entry === 'string' ? issue.severity : entry.severity
+            sections.push(`  - [${severity}] ${detail}`)
+          })
+        }
+        if (issue.seoIssues.length) {
+          sections.push('- SEO:')
+          issue.seoIssues.forEach((entry) => {
+            const detail = typeof entry === 'string' ? entry : entry.detail
+            sections.push(`  - ${detail}`)
+          })
+        }
+        sections.push('')
+      })
+
+      sections.push('## Clean / Info Only', '')
+      if (!data.clean.length && !data.infoOnly.length) sections.push('None', '')
+      ;[...data.clean, ...data.infoOnly].forEach((entry) => {
+        sections.push(`- ${entry.title} (${entry.category})${entry.productUrl ? ` - ${entry.productUrl}` : ''}`)
+      })
+      sections.push('', '## Failed', '')
+      if (!data.errors.length) sections.push('None')
+      data.errors.forEach((entry) => {
+        sections.push(`- ${entry.title}: ${entry.error}`)
+      })
+
+      const storeNameSlug = storeUrl ? storeUrl.replace(/https?:\/\//, '').replace(/\..*/, '') : 'store'
+      downloadFile(
+        `aharoll-audit-${storeNameSlug}-${category === 'all' ? 'all-categories' : slugify(category)}-${new Date().toISOString().slice(0, 10)}.md`,
+        sections.join('\n'),
+        'text/markdown'
+      )
+    } catch (e) {
+      setError('Markdown export failed: ' + e.message)
+    } finally {
+      setExportingFormat('')
+    }
+  }
+
+  const exportHtml = () => {
+    setExportingFormat('html')
+    try {
+      const data = buildReportData()
+      const rows = data.issues.map((issue) => {
+        const findings = issue.inconsistencies.map((entry) => {
+          const detail = typeof entry === 'string' ? entry : entry.detail
+          const severity = typeof entry === 'string' ? issue.severity : entry.severity
+          return `<li><strong>${escapeHtml(severity || '')}</strong> ${escapeHtml(detail || '')}</li>`
+        }).join('')
+        const seo = issue.seoIssues.map((entry) => {
+          const detail = typeof entry === 'string' ? entry : entry.detail
+          return `<li>${escapeHtml(detail || '')}</li>`
+        }).join('')
+        return `
+          <section class="card severity-${escapeHtml(issue.severity)}">
+            <div class="card-header">
+              <div>
+                <h3>${escapeHtml(issue.title)}</h3>
+                <p>${escapeHtml(issue.category)} · <a href="${escapeHtml(issue.productUrl || '#')}">${escapeHtml(issue.productUrl || 'N/A')}</a></p>
+              </div>
+              <span class="badge">${escapeHtml(issue.severity || 'unknown')}</span>
+            </div>
+            <p class="summary">${escapeHtml(issue.summary || 'N/A')}</p>
+            ${issue.missing.length ? `<p><strong>Missing:</strong> ${escapeHtml(issue.missing.join(' | '))}</p>` : ''}
+            ${findings ? `<h4>Findings</h4><ul>${findings}</ul>` : ''}
+            ${seo ? `<h4>SEO</h4><ul>${seo}</ul>` : ''}
+          </section>
+        `
+      }).join('')
+
+      const cleanRows = [...data.clean, ...data.infoOnly].map((entry) =>
+        `<li>${escapeHtml(entry.title)} (${escapeHtml(entry.category)})${entry.productUrl ? ` - <a href="${escapeHtml(entry.productUrl)}">${escapeHtml(entry.productUrl)}</a>` : ''}</li>`
+      ).join('')
+
+      const failedRows = data.errors.map((entry) =>
+        `<li>${escapeHtml(entry.title)}: ${escapeHtml(entry.error || '')}</li>`
+      ).join('')
+
+      const html = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asset & SEO Audit Report</title>
+  <style>
+    body { font-family: Inter, Arial, sans-serif; margin: 0; background: #f5f3ff; color: #1f2937; }
+    main { max-width: 980px; margin: 0 auto; padding: 32px 20px 64px; }
+    .hero { background: linear-gradient(135deg, #581c87, #7e22ce); color: white; padding: 28px; border-radius: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin: 20px 0 28px; }
+    .stat, .card { background: white; border: 1px solid #e9d5ff; border-radius: 14px; padding: 16px; }
+    .stat strong { display: block; font-size: 28px; color: #7e22ce; }
+    .card { margin-bottom: 16px; }
+    .card-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+    .badge { background: #f3e8ff; color: #7e22ce; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .summary { color: #4b5563; }
+    h1, h2, h3, h4, p { margin: 0 0 10px; }
+    ul { margin: 0 0 12px 18px; }
+    a { color: #6d28d9; }
+    .severity-critical { border-color: #c084fc; box-shadow: 0 0 0 1px #e9d5ff inset; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <h1>Asset & SEO Audit Report</h1>
+      <p>Store: ${escapeHtml(data.storeUrl || 'N/A')}</p>
+      <p>Category: ${escapeHtml(data.selectedCategory)}</p>
+      <p>Generated: ${escapeHtml(data.generatedAt)}</p>
+    </section>
+    <section class="stats">
+      <div class="stat"><strong>${data.stats.critical}</strong><span>Critical</span></div>
+      <div class="stat"><strong>${data.stats.high}</strong><span>High</span></div>
+      <div class="stat"><strong>${data.stats.medium}</strong><span>Medium</span></div>
+      <div class="stat"><strong>${data.stats.low}</strong><span>Low</span></div>
+      <div class="stat"><strong>${data.clean.length + data.infoOnly.length}</strong><span>Clean</span></div>
+    </section>
+    <section>
+      <h2>Issues</h2>
+      ${rows || '<p>No actionable issues found.</p>'}
+    </section>
+    <section>
+      <h2>Clean / Info Only</h2>
+      ${cleanRows ? `<ul>${cleanRows}</ul>` : '<p>None</p>'}
+    </section>
+    <section>
+      <h2>Failed</h2>
+      ${failedRows ? `<ul>${failedRows}</ul>` : '<p>None</p>'}
+    </section>
+  </main>
+</body>
+</html>`
+
+      const storeName = storeUrl ? storeUrl.replace(/https?:\/\//, '').replace(/\..*/, '') : 'store'
+      downloadFile(
+        `aharoll-audit-${storeName}-${category === 'all' ? 'all-categories' : slugify(category)}-${new Date().toISOString().slice(0, 10)}.html`,
+        html,
+        'text/html'
+      )
+    } catch (e) {
+      setError('HTML export failed: ' + e.message)
+    } finally {
+      setExportingFormat('')
+    }
   }
 
   // Derived
   const sevOrder = ['critical', 'high', 'medium', 'low', 'info', 'none']
+  const categories = ['all', ...Array.from(new Set(products.map(getProductCategory))).sort((a, b) => a.localeCompare(b))]
+  const filteredProducts = category === 'all' ? products : products.filter(p => getProductCategory(p) === category)
+  const scopedAnalyzableProducts = filteredProducts.filter(p => p.images?.length > 1)
   const actionable = results.filter(r => r.analysis && !['none', 'info'].includes(r.analysis.severity) && !r.error)
   const infoOnly = results.filter(r => r.analysis && r.analysis.severity === 'info')
   const clean = results.filter(r => r.analysis?.severity === 'none')
@@ -191,10 +475,21 @@ export default function App() {
           <span style={{ fontSize: 11, color: '#52525b', borderLeft: '1px solid #27272a', paddingLeft: 10, marginLeft: 4 }}>Asset Auditor</span>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          {phase === 'results' && actionable.length > 0 && (
-            <button onClick={exportPdf} disabled={exporting} style={{ ...btn, background: exporting ? '#27272a' : 'linear-gradient(135deg, #6366f1, #7c3aed)', color: '#fff', fontWeight: 600 }}>
-              {exporting ? 'Generating PDF...' : 'Export PDF Report'}
-            </button>
+          {phase === 'results' && results.length > 0 && (
+            <>
+              <button onClick={exportPdf} disabled={!!exportingFormat} style={{ ...btn, background: exportingFormat === 'pdf' ? '#27272a' : 'linear-gradient(135deg, #581c87, #7c3aed)', color: '#fff', fontWeight: 600 }}>
+                {exportingFormat === 'pdf' ? 'Generating PDF...' : 'PDF'}
+              </button>
+              <button onClick={exportMarkdown} disabled={!!exportingFormat} style={{ ...btn, background: '#18181b', color: '#e4e4e7', fontWeight: 600 }}>
+                {exportingFormat === 'md' ? 'Generating MD...' : 'MD'}
+              </button>
+              <button onClick={exportHtml} disabled={!!exportingFormat} style={{ ...btn, background: '#18181b', color: '#e4e4e7', fontWeight: 600 }}>
+                {exportingFormat === 'html' ? 'Generating HTML...' : 'HTML'}
+              </button>
+              <button onClick={exportJson} disabled={!!exportingFormat} style={{ ...btn, background: '#18181b', color: '#e4e4e7', fontWeight: 600 }}>
+                {exportingFormat === 'json' ? 'Generating JSON...' : 'JSON'}
+              </button>
+            </>
           )}
           {phase !== 'input' && <button onClick={reset} style={{ ...btn, background: '#18181b', color: '#a1a1aa' }}>New Audit</button>}
         </div>
@@ -250,20 +545,37 @@ export default function App() {
         {phase === 'loaded' && (
           <div>
             <div style={{ marginBottom: 24 }}>
-              <div style={{ fontSize: 48, fontWeight: 800, letterSpacing: '-0.04em' }}>{products.length}</div>
+              <div style={{ fontSize: 48, fontWeight: 800, letterSpacing: '-0.04em' }}>{filteredProducts.length}</div>
               <div style={{ color: '#71717a', fontSize: 14 }}>
-                products found · <span style={{ color: '#a1a1aa' }}>{products.filter(p => p.images?.length > 1).length} with multiple images</span>
+                available products in scope · <span style={{ color: '#a1a1aa' }}>{scopedAnalyzableProducts.length} with multiple images</span>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 12, marginBottom: 24 }}>
+              <div style={{ background: '#111114', border: '1px solid #1e1e24', borderRadius: 10, padding: 14 }}>
+                <label style={labelStyle}>Category scope</label>
+                <select value={category} onChange={e => setCategory(e.target.value)} style={{ ...inputStyle, appearance: 'none' }}>
+                  {categories.map(option => (
+                    <option key={option} value={option}>{option === 'all' ? 'All categories' : option}</option>
+                  ))}
+                </select>
+              </div>
+              <div style={{ background: '#111114', border: '1px solid #1e1e24', borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 12, color: '#71717a', marginBottom: 6 }}>Scope summary</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: '#e4e4e7' }}>{categories.length - 1}</div>
+                <div style={{ fontSize: 12, color: '#71717a' }}>categories available · current scope: {category === 'all' ? 'all categories' : category}</div>
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 6, marginBottom: 28, maxHeight: 340, overflowY: 'auto', padding: 2 }}>
-              {products.slice(0, 80).map((p, i) => (
+              {filteredProducts.slice(0, 80).map((p, i) => (
                 <a key={i} href={getProductUrl(storeUrl, p)} target="_blank" rel="noopener noreferrer" style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', border: '1px solid #1e1e24', background: '#111', display: 'block', textDecoration: 'none' }}>
                   {p.images?.[0] ? <img src={p.images[0].src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#52525b' }}>No img</div>}
                   {p.images?.length > 1 && <div style={{ position: 'absolute', top: 4, right: 4, background: 'rgba(0,0,0,0.75)', borderRadius: 4, padding: '1px 6px', fontSize: 10, color: '#ccc' }}>{p.images.length}</div>}
                 </a>
               ))}
             </div>
-            <button onClick={analyze} style={{ width: '100%', ...btn, padding: '16px', background: 'linear-gradient(135deg, #6366f1, #7c3aed)', color: '#fff', fontSize: 16, fontWeight: 700 }}>Run Full Audit</button>
+            <button onClick={analyze} style={{ width: '100%', ...btn, padding: '16px', background: 'linear-gradient(135deg, #581c87, #7c3aed)', color: '#fff', fontSize: 16, fontWeight: 700 }}>
+              Run {category === 'all' ? 'Full' : category} Audit
+            </button>
             {error && <div style={errorBox}>{error}</div>}
           </div>
         )}
@@ -273,6 +585,9 @@ export default function App() {
           <div>
             {phase === 'analyzing' && (
               <div style={{ marginBottom: 32 }}>
+                <div style={{ fontSize: 12, color: '#a78bfa', marginBottom: 10 }}>
+                  Scope: {category === 'all' ? 'All categories' : category} · {scopedAnalyzableProducts.length} products queued
+                </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: '#a1a1aa', marginBottom: 8 }}>
                   <span style={{ maxWidth: '70%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{progress.status}</span>
                   <span>{Math.round((progress.current / progress.total) * 100)}%</span>
@@ -337,7 +652,7 @@ export default function App() {
       {results.length > 0 && (
         <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
           <div ref={reportRef} style={{ width: '794px', background: '#fff', color: '#111', fontFamily: "'Inter', sans-serif", fontSize: '13px' }}>
-            <PdfReport storeUrl={storeUrl} products={products} issues={sorted} clean={clean} infoOnly={infoOnly} stats={stats} />
+            <PdfReport storeUrl={storeUrl} products={filteredProducts} issues={sorted} clean={clean} infoOnly={infoOnly} stats={stats} category={category} />
           </div>
         </div>
       )}
@@ -452,7 +767,7 @@ function ProductCard({ r, storeUrl }) {
 }
 
 // ── PDF Report ──
-function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats }) {
+function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats, category }) {
   const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   const storeName = storeUrl ? storeUrl.replace(/https?:\/\//, '').replace(/\/.*/, '') : 'Store'
 
@@ -464,12 +779,12 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats }) {
           <span style={{ fontWeight: 700, fontSize: 14 }}>AhaRoll</span>
         </div>
         <h1 style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.03em', margin: 0 }}>Asset & SEO Audit Report</h1>
-        <p style={{ fontSize: 13, opacity: 0.7, marginTop: 6 }}>{storeName} · {date} · {products.length} products analyzed</p>
+        <p style={{ fontSize: 13, opacity: 0.7, marginTop: 6 }}>{storeName} · {date} · {products.length} products in scope · {category === 'all' ? 'All categories' : category}</p>
       </div>
 
       <div style={{ display: 'flex', gap: 12, padding: '24px 48px' }}>
         {[
-          { label: 'Critical', n: stats.critical, c: '#dc2626' },
+          { label: 'Critical', n: stats.critical, c: '#7e22ce' },
           { label: 'High', n: stats.high, c: '#e11d48' },
           { label: 'Medium', n: stats.medium, c: '#ea580c' },
           { label: 'Low', n: stats.low, c: '#ca8a04' },
@@ -548,7 +863,7 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats }) {
             <h3 style={{ fontSize: 14, fontWeight: 600, color: '#16a34a', marginBottom: 8 }}>Clean / Info Only ({(clean?.length || 0) + (infoOnly?.length || 0)})</h3>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               {[...(clean || []), ...(infoOnly || [])].map((r, i) => (
-                <span key={i} style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 6, padding: '4px 10px', fontSize: 11, color: '#166534' }}>{r.product.title}</span>
+                <a key={i} href={getProductUrl(storeUrl, r.product) || '#'} style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 6, padding: '4px 10px', fontSize: 11, color: '#166534', textDecoration: 'none' }}>{r.product.title}</a>
               ))}
             </div>
           </div>
