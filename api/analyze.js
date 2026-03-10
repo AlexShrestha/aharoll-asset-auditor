@@ -1,3 +1,214 @@
+const SEVERITY_ORDER = ['none', 'info', 'low', 'medium', 'high', 'critical'];
+
+function severityRank(severity) {
+  const index = SEVERITY_ORDER.indexOf(severity || 'none');
+  return index === -1 ? 0 : index;
+}
+
+function maxSeverity(...levels) {
+  return levels.reduce((max, level) => severityRank(level) > severityRank(max) ? level : max, 'none');
+}
+
+function parseContentLength(headers) {
+  const raw = headers.get('content-length');
+  if (!raw) return null;
+  const parsed = Number.parseInt(raw, 10);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function bytesToMb(bytes) {
+  return bytes / (1024 * 1024);
+}
+
+async function fetchWithTimeout(url, options = {}, timeoutMs = 12000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'AhaRoll-Asset-Auditor/1.0',
+        ...(options.headers || {}),
+      },
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function measurePageLoad(productUrl) {
+  if (!productUrl) {
+    return { productUrl: null, pageLoadMs: null, pageSizeBytes: null, error: 'productUrl_missing' };
+  }
+
+  const startedAt = Date.now();
+
+  try {
+    const response = await fetchWithTimeout(productUrl, { method: 'GET', redirect: 'follow' }, 15000);
+    const html = await response.text();
+
+    return {
+      productUrl,
+      pageLoadMs: Date.now() - startedAt,
+      pageSizeBytes: parseContentLength(response.headers) ?? Buffer.byteLength(html, 'utf8'),
+      status: response.status,
+      ok: response.ok,
+    };
+  } catch (error) {
+    return {
+      productUrl,
+      pageLoadMs: null,
+      pageSizeBytes: null,
+      error: error.name === 'AbortError' ? 'timeout' : error.message,
+    };
+  }
+}
+
+async function measureImage(url) {
+  try {
+    const response = await fetchWithTimeout(url, { method: 'HEAD', redirect: 'follow' }, 10000);
+    const sizeBytes = parseContentLength(response.headers);
+
+    if (sizeBytes != null || !response.ok) {
+      return {
+        url,
+        sizeBytes,
+        contentType: response.headers.get('content-type') || null,
+        ok: response.ok,
+      };
+    }
+  } catch (_) {
+    // Fallback below.
+  }
+
+  try {
+    const response = await fetchWithTimeout(url, {
+      method: 'GET',
+      redirect: 'follow',
+      headers: { Range: 'bytes=0-0' },
+    }, 10000);
+
+    let sizeBytes = parseContentLength(response.headers);
+    const contentRange = response.headers.get('content-range');
+    if (sizeBytes == null && contentRange) {
+      const match = contentRange.match(/\/(\d+)$/);
+      if (match) sizeBytes = Number.parseInt(match[1], 10);
+    }
+
+    return {
+      url,
+      sizeBytes,
+      contentType: response.headers.get('content-type') || null,
+      ok: response.ok,
+    };
+  } catch (error) {
+    return {
+      url,
+      sizeBytes: null,
+      contentType: null,
+      ok: false,
+      error: error.name === 'AbortError' ? 'timeout' : error.message,
+    };
+  }
+}
+
+async function measurePerformance(productUrl, imageUrls) {
+  const [page, images] = await Promise.all([
+    measurePageLoad(productUrl),
+    Promise.all((imageUrls || []).slice(0, 10).map((url) => measureImage(url))),
+  ]);
+
+  const knownImageSizes = images.map((entry) => entry.sizeBytes).filter((value) => Number.isFinite(value));
+  const totalImageBytes = knownImageSizes.reduce((sum, value) => sum + value, 0);
+  const largestImageBytes = knownImageSizes.length ? Math.max(...knownImageSizes) : null;
+
+  return {
+    productUrl: page.productUrl,
+    pageLoadMs: page.pageLoadMs,
+    pageSizeBytes: page.pageSizeBytes,
+    pageStatus: page.status || null,
+    pageError: page.error || null,
+    totalImageBytes: knownImageSizes.length ? totalImageBytes : null,
+    largestImageBytes,
+    measuredImageCount: knownImageSizes.length,
+    imageCount: images.length,
+    imageMetrics: images,
+  };
+}
+
+function derivePerformanceIssues(performance) {
+  const issues = [];
+
+  if (performance.pageLoadMs != null) {
+    if (performance.pageLoadMs >= 8000) {
+      issues.push({
+        type: 'page_load',
+        severity: 'high',
+        detail: `Product page load time is ${performance.pageLoadMs} ms, which is slow enough to risk functionality and conversion.`,
+      });
+    } else if (performance.pageLoadMs >= 4000) {
+      issues.push({
+        type: 'page_load',
+        severity: 'medium',
+        detail: `Product page load time is ${performance.pageLoadMs} ms, which is slower than expected for a product page.`,
+      });
+    } else if (performance.pageLoadMs >= 2500) {
+      issues.push({
+        type: 'page_load',
+        severity: 'low',
+        detail: `Product page load time is ${performance.pageLoadMs} ms and should be improved.`,
+      });
+    }
+  }
+
+  if (performance.totalImageBytes != null) {
+    const totalMb = bytesToMb(performance.totalImageBytes);
+    const largestMb = performance.largestImageBytes != null ? bytesToMb(performance.largestImageBytes) : null;
+
+    if (totalMb >= 12 || (largestMb != null && largestMb >= 3)) {
+      issues.push({
+        type: 'image_size',
+        severity: 'high',
+        detail: `Image payload is heavy at ${totalMb.toFixed(2)} MB total${largestMb != null ? ` with a largest file of ${largestMb.toFixed(2)} MB` : ''}.`,
+      });
+    } else if (totalMb >= 5 || (largestMb != null && largestMb >= 1.5)) {
+      issues.push({
+        type: 'image_size',
+        severity: 'medium',
+        detail: `Image payload totals ${totalMb.toFixed(2)} MB${largestMb != null ? ` and the largest file is ${largestMb.toFixed(2)} MB` : ''}.`,
+      });
+    } else if (totalMb >= 2.5) {
+      issues.push({
+        type: 'image_size',
+        severity: 'low',
+        detail: `Image payload totals ${totalMb.toFixed(2)} MB and can likely be optimized further.`,
+      });
+    }
+  }
+
+  return issues;
+}
+
+function normalizeIssue(entry, fallbackSeverity) {
+  if (typeof entry === 'string') {
+    const detail = entry.trim();
+    return detail ? { type: 'other', severity: fallbackSeverity, detail } : null;
+  }
+
+  if (!entry || typeof entry !== 'object') return null;
+  const detail = typeof entry.detail === 'string' ? entry.detail.trim() : '';
+  if (!detail) return null;
+
+  return {
+    ...entry,
+    severity: entry.severity || fallbackSeverity,
+    type: entry.type || 'other',
+    detail,
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -8,12 +219,13 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'OPENAI_API_KEY not configured' });
   }
 
-  const { title, imageUrls, variants, productType, brandContext, imageAlts, imageFilenames } = req.body;
+  const { title, productUrl, imageUrls, variants, productType, brandContext, imageAlts, imageFilenames } = req.body;
   if (!imageUrls || !imageUrls.length) {
     return res.status(400).json({ error: 'imageUrls required' });
   }
 
-  const imageContent = imageUrls.slice(0, 10).map((url) => ({
+  const limitedImageUrls = imageUrls.slice(0, 10);
+  const imageContent = limitedImageUrls.map((url) => ({
     type: 'image_url',
     image_url: { url, detail: 'low' },
   }));
@@ -135,27 +347,30 @@ Respond ONLY in valid JSON (no markdown, no backticks):
 }`;
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: 'gpt-5.1',
-        max_completion_tokens: 2000,
-        temperature: 0.1,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              ...imageContent,
-              { type: 'text', text: prompt },
-            ],
-          },
-        ],
+    const [performance, response] = await Promise.all([
+      measurePerformance(productUrl, limitedImageUrls),
+      fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-5.1',
+          max_completion_tokens: 2000,
+          temperature: 0.1,
+          messages: [
+            {
+              role: 'user',
+              content: [
+                ...imageContent,
+                { type: 'text', text: prompt },
+              ],
+            },
+          ],
+        }),
       }),
-    });
+    ]);
 
     const data = await response.json();
 
@@ -166,6 +381,23 @@ Respond ONLY in valid JSON (no markdown, no backticks):
     const text = data.choices?.[0]?.message?.content || '';
     const clean = text.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
+
+    const normalizedInconsistencies = (parsed.inconsistencies || [])
+      .map((entry) => normalizeIssue(entry, parsed.severity || 'none'))
+      .filter(Boolean);
+
+    const performanceIssues = derivePerformanceIssues(performance);
+    const performanceSeverity = performanceIssues.reduce((max, issue) => maxSeverity(max, issue.severity), 'none');
+    const combinedSeverity = maxSeverity(parsed.severity || 'none', performanceSeverity);
+
+    parsed.inconsistencies = [...normalizedInconsistencies, ...performanceIssues];
+    parsed.performance = performance;
+
+    if (severityRank(performanceSeverity) > severityRank(parsed.severity || 'none') && performanceIssues[0]) {
+      parsed.summary = performanceIssues[0].detail;
+    }
+
+    parsed.severity = combinedSeverity;
 
     return res.status(200).json(parsed);
   } catch (error) {

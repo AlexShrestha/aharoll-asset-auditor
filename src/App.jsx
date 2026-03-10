@@ -16,11 +16,14 @@ const ISSUE_ICONS = {
   quality_mismatch: '📸', no_model: '🚫', model_inconsistency: '👤',
   brand_deviation: '⚠️', seo: '🔍', seo_alt_text: '🔍', seo_filenames: '🔍',
   seo_format: '🔍', seo_gallery_order: '📋', duplicate: '♻️', resolution: '🖼',
+  page_load: '⏱️', image_size: '🗜️',
   gallery_order: '📋', size_info: 'ℹ️', size_only: 'ℹ️', variant_integrity: '🏷️',
   missing_detail: '🔬', missing_hero: '⭐', wrong_variant_media: '❌',
   missing_model: '🚫', variant_ambiguity: '🏷️', missing_category: '📐',
   near_duplicate: '♻️', consistency: '🎭', merchandising: '⚠️', other: '▸',
 }
+
+const SEV_ORDER = ['none', 'info', 'low', 'medium', 'high', 'critical']
 
 function getStoreBaseUrl(storeUrl) {
   if (!storeUrl) return ''
@@ -34,6 +37,11 @@ function getProductUrl(storeUrl, product) {
   const handle = product?.handle || product?.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   if (!handle) return null
   return `${getStoreBaseUrl(storeUrl)}/products/${handle}`
+}
+
+function severityRank(severity) {
+  const index = SEV_ORDER.indexOf(severity || 'none')
+  return index === -1 ? 0 : index
 }
 
 function getProductCategory(product) {
@@ -75,6 +83,19 @@ function downloadFile(filename, content, mimeType) {
   URL.revokeObjectURL(url)
 }
 
+function formatBytes(bytes) {
+  if (bytes == null || Number.isNaN(bytes)) return 'n/a'
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+}
+
+function formatDuration(ms) {
+  if (ms == null || Number.isNaN(ms)) return 'n/a'
+  if (ms < 1000) return `${Math.round(ms)} ms`
+  return `${(ms / 1000).toFixed(2)} s`
+}
+
 function normalizeIssueEntry(entry, fallbackSeverity, forcedType) {
   if (typeof entry === 'string') {
     const detail = entry.trim()
@@ -106,6 +127,18 @@ function collectIssues(analysis) {
     ...(analysis.inconsistencies || []).map((entry) => normalizeIssueEntry(entry, analysis.severity)),
     ...(analysis.seo_issues || []).map((entry) => normalizeIssueEntry(entry, 'low', 'seo')),
   ].filter(Boolean)
+}
+
+function severityLabel(severity) {
+  return (severity || 'none').toUpperCase()
+}
+
+function getPerformanceTone(value, thresholds) {
+  if (value == null) return 'none'
+  if (value >= thresholds.high) return 'high'
+  if (value >= thresholds.medium) return 'medium'
+  if (value >= thresholds.low) return 'low'
+  return 'none'
 }
 
 export default function App() {
@@ -199,6 +232,7 @@ export default function App() {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             title: product.title,
+            productUrl: getProductUrl(storeUrl, product),
             imageUrls: product.images.slice(0, 10).map(img => img.src),
             variants: variantData.length > 1 ? variantData : undefined,
             productType: product.product_type || undefined,
@@ -238,6 +272,7 @@ export default function App() {
       missing: entry.analysis?.missing || [],
       scores: entry.analysis?.scores || null,
       images: entry.analysis?.images || [],
+      performance: entry.analysis?.performance || null,
       error: entry.error || null,
     })
 
@@ -761,6 +796,13 @@ function ProductCard({ r, storeUrl }) {
   const sev = SEV[r.analysis.severity] || SEV.medium
   const productUrl = getProductUrl(storeUrl, r.product)
   const allIssues = collectIssues(r.analysis)
+  const rankedIssues = [...allIssues].sort((a, b) => severityRank(b.severity) - severityRank(a.severity))
+  const speedTone = getPerformanceTone(r.analysis.performance?.pageLoadMs, { low: 2500, medium: 4000, high: 8000 })
+  const imageTone = getPerformanceTone(r.analysis.performance?.totalImageBytes || 0, {
+    low: 2.5 * 1024 * 1024,
+    medium: 5 * 1024 * 1024,
+    high: 12 * 1024 * 1024,
+  })
 
   return (
     <div style={{ background: sev.bg, border: `1px solid ${sev.border}`, borderRadius: 12, padding: 20, marginBottom: 12 }}>
@@ -802,19 +844,72 @@ function ProductCard({ r, storeUrl }) {
 
       <div style={{ fontSize: 13, color: '#a1a1aa', fontStyle: 'italic', marginBottom: 12 }}>{r.analysis.summary}</div>
 
-      {allIssues.map((issue, j) => {
-        const icon = ISSUE_ICONS[issue.type] || '▸'
-        const issueSev = SEV[issue.severity] || sev
-        return (
-          <div key={j} style={{ display: 'flex', gap: 8, fontSize: 13, marginBottom: 6, alignItems: 'flex-start' }}>
-            <span style={{ flexShrink: 0, fontSize: 11 }}>{icon}</span>
-            <div>
-              <span style={{ fontSize: 10, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em', color: issueSev.text, marginRight: 6 }}>{issue.severity || ''}</span>
-              <span style={{ color: '#d4d4d8' }}>{issue.detail}</span>
-            </div>
+      {r.analysis.performance && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10, marginBottom: 16 }}>
+          {[
+            {
+              key: 'speed',
+              label: 'Page Speed',
+              value: formatDuration(r.analysis.performance.pageLoadMs),
+              sub: r.analysis.performance.pageLoadMs != null ? `${severityLabel(speedTone)} impact` : 'Not measured',
+              tone: speedTone,
+            },
+            {
+              key: 'payload',
+              label: 'Image Payload',
+              value: formatBytes(r.analysis.performance.totalImageBytes),
+              sub: r.analysis.performance.totalImageBytes != null
+                ? `${formatBytes(r.analysis.performance.largestImageBytes)} largest file`
+                : 'Not measured',
+              tone: imageTone,
+            },
+          ].map((metric) => {
+            const metricSev = SEV[metric.tone] || { text: '#a1a1aa', border: '#27272a' }
+            return (
+              <div key={metric.key} style={{ background: '#120f16', border: `1px solid ${metricSev.border}`, borderRadius: 12, padding: '12px 14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8b8b98' }}>{metric.label}</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: metricSev.text }}>{metric.sub}</span>
+                </div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: '#f5f3ff', letterSpacing: '-0.03em' }}>{metric.value}</div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {rankedIssues.length > 0 && (
+        <div style={{ background: '#110d15', border: '1px solid #241a2d', borderRadius: 14, overflow: 'hidden', marginBottom: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '88px 1fr 96px', gap: 12, padding: '10px 14px', borderBottom: '1px solid #241a2d', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#71717a' }}>
+            <span>Rank</span>
+            <span>Finding</span>
+            <span style={{ textAlign: 'right' }}>Detail</span>
           </div>
-        )
-      })}
+          {rankedIssues.map((issue, j) => {
+            const icon = ISSUE_ICONS[issue.type] || '▸'
+            const issueSev = SEV[issue.severity] || sev
+            return (
+              <details key={j} style={{ borderBottom: j === rankedIssues.length - 1 ? 'none' : '1px solid #1d1725' }}>
+                <summary style={{ listStyle: 'none', cursor: 'pointer', display: 'grid', gridTemplateColumns: '88px 1fr 96px', gap: 12, alignItems: 'center', padding: '14px' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 'fit-content', gap: 6, fontSize: 11, fontWeight: 700, color: issueSev.text, background: `${issueSev.text}18`, border: `1px solid ${issueSev.border}`, borderRadius: 999, padding: '4px 10px', textTransform: 'uppercase' }}>
+                    {severityLabel(issue.severity)}
+                  </span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                    <span style={{ flexShrink: 0, fontSize: 14 }}>{icon}</span>
+                    <span style={{ color: '#f4f4f5', fontSize: 14, lineHeight: 1.4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{issue.detail}</span>
+                  </span>
+                  <span style={{ textAlign: 'right', fontSize: 12, color: '#a78bfa', fontWeight: 600 }}>Details</span>
+                </summary>
+                <div style={{ padding: '0 14px 14px 114px' }}>
+                  <div style={{ background: '#18131f', border: '1px solid #2c2137', borderRadius: 10, padding: '12px 14px', color: '#d4d4d8', fontSize: 13, lineHeight: 1.6 }}>
+                    {issue.detail}
+                  </div>
+                </div>
+              </details>
+            )
+          })}
+        </div>
+      )}
 
       {r.analysis.missing?.length > 0 && (
         <div style={{ marginTop: 10, padding: '8px 12px', background: `${sev.text}10`, borderRadius: 6, fontSize: 12, color: sev.text }}>
@@ -925,6 +1020,17 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats, categor
               </div>
 
               <div style={{ fontSize: 12, color: '#555', fontStyle: 'italic', marginBottom: 8 }}>{r.analysis.summary}</div>
+
+              {r.analysis.performance && (
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+                  <span style={{ fontSize: 10, color: '#444', background: '#fff', border: '1px solid #ddd6fe', borderRadius: 999, padding: '4px 8px' }}>
+                    Load {formatDuration(r.analysis.performance.pageLoadMs)}
+                  </span>
+                  <span style={{ fontSize: 10, color: '#444', background: '#fff', border: '1px solid #ddd6fe', borderRadius: 999, padding: '4px 8px' }}>
+                    Images {formatBytes(r.analysis.performance.totalImageBytes)}
+                  </span>
+                </div>
+              )}
 
               {allIssues.map((issue, j) => {
                 const issueSev = SEV[issue.severity] || sev
