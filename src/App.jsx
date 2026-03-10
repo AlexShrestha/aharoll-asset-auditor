@@ -23,12 +23,15 @@ const ISSUE_ICONS = {
 }
 
 function getStoreBaseUrl(storeUrl) {
+  if (!storeUrl) return ''
   let u = storeUrl.trim().replace(/\/+$/, '')
   if (!u.startsWith('http')) u = 'https://' + u
   return u
 }
 
-function getProductUrl(storeUrl, handle) {
+function getProductUrl(storeUrl, product) {
+  if (!storeUrl || !storeUrl.trim()) return null
+  const handle = product?.handle || product?.title?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
   if (!handle) return null
   return `${getStoreBaseUrl(storeUrl)}/products/${handle}`
 }
@@ -57,6 +60,8 @@ export default function App() {
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Failed to fetch')
       if (!data.products?.length) throw new Error('No products found')
+      // Use resolved URL from server (handles https:// normalization)
+      if (data.storeBaseUrl) setStoreUrl(data.storeBaseUrl)
       setProducts(data.products); setPhase('loaded')
     } catch (e) {
       setError(e.message); setShowJson(true); setPhase('input')
@@ -96,8 +101,8 @@ export default function App() {
       setProgress({ current: i + 1, total: multi.length, status: `Analyzing: ${product.title.slice(0, 50)}...` })
 
       try {
-        // Filter to only available variants
-        const availableVariants = (product.variants || []).filter(v => v.available !== false)
+        // Filter to only available variants (strict: must be explicitly true)
+        const availableVariants = (product.variants || []).filter(v => v.available === true)
         const variantData = availableVariants.map(v => {
           const dim = classifyVariantDimension(v.option1)
           return {
@@ -147,9 +152,10 @@ export default function App() {
       const el = reportRef.current; if (!el) return
       const storeName = storeUrl ? storeUrl.replace(/https?:\/\//, '').replace(/\..*/,'') : 'store'
       await html2pdf().set({
-        margin: 0, filename: `aharoll-audit-${storeName}-${new Date().toISOString().slice(0,10)}.pdf`,
-        image: { type: 'jpeg', quality: 0.95 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
+        margin: [10, 10, 10, 10],
+        filename: `aharoll-audit-${storeName}-${new Date().toISOString().slice(0,10)}.pdf`,
+        image: { type: 'jpeg', quality: 0.9 },
+        html2canvas: { scale: 2, useCORS: true, allowTaint: true, logging: false, imageTimeout: 15000 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
       }).from(el).save()
@@ -251,7 +257,7 @@ export default function App() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))', gap: 6, marginBottom: 28, maxHeight: 340, overflowY: 'auto', padding: 2 }}>
               {products.slice(0, 80).map((p, i) => (
-                <a key={i} href={getProductUrl(storeUrl, p.handle)} target="_blank" rel="noopener noreferrer" style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', border: '1px solid #1e1e24', background: '#111', display: 'block', textDecoration: 'none' }}>
+                <a key={i} href={getProductUrl(storeUrl, p)} target="_blank" rel="noopener noreferrer" style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden', border: '1px solid #1e1e24', background: '#111', display: 'block', textDecoration: 'none' }}>
                   {p.images?.[0] ? <img src={p.images[0].src} alt="" loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#52525b' }}>No img</div>}
                   {p.images?.length > 1 && <div style={{ position: 'absolute', top: 4, right: 4, background: 'rgba(0,0,0,0.75)', borderRadius: 4, padding: '1px 6px', fontSize: 10, color: '#ccc' }}>{p.images.length}</div>}
                 </a>
@@ -316,7 +322,7 @@ export default function App() {
                 <h4 style={{ fontSize: 13, color: '#4ade80', fontWeight: 600, marginBottom: 8 }}>Clean / Info Only ({clean.length + infoOnly.length})</h4>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                   {[...clean, ...infoOnly].map((r, i) => (
-                    <a key={i} href={getProductUrl(storeUrl, r.product.handle)} target="_blank" rel="noopener noreferrer" style={{ background: '#052e16', border: '1px solid #166534', borderRadius: 6, padding: '4px 10px', fontSize: 12, color: '#4ade80', textDecoration: 'none' }}>
+                    <a key={i} href={getProductUrl(storeUrl, r.product)} target="_blank" rel="noopener noreferrer" style={{ background: '#052e16', border: '1px solid #166534', borderRadius: 6, padding: '4px 10px', fontSize: 12, color: '#4ade80', textDecoration: 'none' }}>
                       {r.product.title}
                     </a>
                   ))}
@@ -342,7 +348,7 @@ export default function App() {
 // ── ProductCard ──
 function ProductCard({ r, storeUrl }) {
   const sev = SEV[r.analysis.severity] || SEV.medium
-  const productUrl = getProductUrl(storeUrl, r.product.handle)
+  const productUrl = getProductUrl(storeUrl, r.product)
   const allIssues = [
     ...(r.analysis.inconsistencies || []).map(i => typeof i === 'string' ? { type: 'other', severity: r.analysis.severity, detail: i } : i),
     ...(r.analysis.seo_issues || []).map(i => ({ ...i, type: 'seo' })),
@@ -358,11 +364,11 @@ function ProductCard({ r, storeUrl }) {
               : r.product.title}
           </div>
           <div style={{ fontSize: 12, color: '#71717a', marginTop: 2 }}>
-            {r.product.images?.length} images · {r.product.variants?.filter(v => v.available !== false).length || 0}/{r.product.variants?.length || 0} variants available
+            {r.product.images?.length} images · {r.product.variants?.filter(v => v.available === true).length || 0} available variants
             {r.analysis.detected_category && <span style={{ color: '#52525b' }}> · {r.analysis.detected_category}</span>}
-            {r.product.variants?.length > 1 && (
+            {r.product.variants?.filter(v => v.available === true).length > 1 && (
               <span style={{ color: '#52525b' }}>
-                {' '}({r.product.variants.slice(0, 4).map(v => v.title || v.option1).join(', ')}{r.product.variants.length > 4 ? ` +${r.product.variants.length - 4}` : ''})
+                {' '}({r.product.variants.filter(v => v.available === true).slice(0, 4).map(v => v.title || v.option1).join(', ')}{r.product.variants.filter(v => v.available === true).length > 4 ? ` +${r.product.variants.filter(v => v.available === true).length - 4}` : ''})
               </span>
             )}
           </div>
@@ -481,7 +487,7 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats }) {
 
         {issues.map((r, i) => {
           const sev = SEV[r.analysis.severity] || SEV.medium
-          const productUrl = getProductUrl(storeUrl, r.product.handle)
+          const productUrl = getProductUrl(storeUrl, r.product)
           const allIssues = [
             ...(r.analysis.inconsistencies || []).map(x => typeof x === 'string' ? { type: 'other', severity: r.analysis.severity, detail: x } : x),
             ...(r.analysis.seo_issues || []).map(x => ({ ...x, type: 'seo' })),

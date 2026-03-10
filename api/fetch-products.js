@@ -65,6 +65,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       products: allProducts,
+      storeBaseUrl: baseUrl,
       meta: {
         total: allProducts.length,
         pages: page,
