@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const BATCH_DELAY = 1500
 
@@ -142,6 +142,7 @@ function getPerformanceTone(value, thresholds) {
 }
 
 export default function App() {
+  const [mode, setMode] = useState(() => window.location.hash === '#admin' ? 'admin' : 'audit')
   const [storeUrl, setStoreUrl] = useState('')
   const [products, setProducts] = useState([])
   const [category, setCategory] = useState('all')
@@ -155,6 +156,21 @@ export default function App() {
   const abortRef = useRef(false)
   const accRef = useRef([])
   const reportRef = useRef(null)
+
+  useEffect(() => {
+    const onHashChange = () => setMode(window.location.hash === '#admin' ? 'admin' : 'audit')
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
+  const switchMode = (nextMode) => {
+    setMode(nextMode)
+    if (nextMode === 'admin') {
+      window.location.hash = 'admin'
+    } else {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    }
+  }
 
   const fetchProducts = async () => {
     setPhase('loading'); setError('')
@@ -559,6 +575,10 @@ export default function App() {
   }
   const sorted = [...actionable].sort((a, b) => sevOrder.indexOf(a.analysis.severity) - sevOrder.indexOf(b.analysis.severity))
 
+  if (mode === 'admin') {
+    return <AdminDashboard onBack={() => switchMode('audit')} />
+  }
+
   return (
     <div style={{ minHeight: '100vh' }}>
       {/* HEADER */}
@@ -573,6 +593,7 @@ export default function App() {
           <span style={{ fontSize: 11, color: '#52525b', borderLeft: '1px solid #27272a', paddingLeft: 10, marginLeft: 4 }}>Asset Auditor</span>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={() => switchMode('admin')} style={{ ...btn, background: '#111114', color: '#c4b5fd', border: '1px solid #2e1065' }}>Queue Admin</button>
           {phase === 'results' && results.length > 0 && (
             <>
               <button onClick={exportPdf} disabled={!!exportingFormat} style={{ ...btn, background: exportingFormat === 'pdf' ? '#27272a' : 'linear-gradient(135deg, #581c87, #7c3aed)', color: '#fff', fontWeight: 600 }}>
@@ -1070,6 +1091,444 @@ function PdfReport({ storeUrl, products, issues, clean, infoOnly, stats, categor
         </div>
       </div>
     </div>
+  )
+}
+
+function AdminDashboard({ onBack }) {
+  const [authenticated, setAuthenticated] = useState(false)
+  const [authLoading, setAuthLoading] = useState(true)
+  const [adminKey, setAdminKey] = useState('')
+  const [authError, setAuthError] = useState('')
+  const [jobsData, setJobsData] = useState({ jobs: [], counts: {} })
+  const [jobsLoading, setJobsLoading] = useState(false)
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [search, setSearch] = useState('')
+  const [selectedJobId, setSelectedJobId] = useState('')
+  const [jobDetail, setJobDetail] = useState(null)
+  const [detailLoading, setDetailLoading] = useState(false)
+  const [productStatusFilter, setProductStatusFilter] = useState('all')
+  const [severityFilter, setSeverityFilter] = useState('all')
+  const [actionLoading, setActionLoading] = useState('')
+
+  const loadSession = async () => {
+    setAuthLoading(true)
+    try {
+      const res = await fetch('/api/admin-session', { credentials: 'include' })
+      const data = await res.json()
+      setAuthenticated(!!data.authenticated)
+    } catch {
+      setAuthenticated(false)
+    } finally {
+      setAuthLoading(false)
+    }
+  }
+
+  const loadJobs = async () => {
+    if (!authenticated) return
+    setJobsLoading(true)
+    try {
+      const qs = new URLSearchParams({ status: statusFilter, limit: '30', offset: '0' })
+      if (search.trim()) qs.set('search', search.trim())
+      const res = await fetch(`/api/admin-jobs?${qs.toString()}`, { credentials: 'include' })
+      if (res.status === 401) {
+        setAuthenticated(false)
+        return
+      }
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to load jobs')
+      setJobsData(data)
+      if (!selectedJobId && data.jobs?.[0]?.id) setSelectedJobId(data.jobs[0].id)
+      if (selectedJobId && !data.jobs.some(job => job.id === selectedJobId) && data.jobs?.[0]?.id) setSelectedJobId(data.jobs[0].id)
+    } catch (e) {
+      setAuthError(e.message)
+    } finally {
+      setJobsLoading(false)
+    }
+  }
+
+  const loadJobDetail = async (jobId = selectedJobId) => {
+    if (!authenticated || !jobId) return
+    setDetailLoading(true)
+    try {
+      const qs = new URLSearchParams({
+        jobId,
+        limit: '120',
+        offset: '0',
+        productStatus: productStatusFilter,
+        severity: severityFilter,
+      })
+      const res = await fetch(`/api/admin-job?${qs.toString()}`, { credentials: 'include' })
+      if (res.status === 401) {
+        setAuthenticated(false)
+        return
+      }
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Failed to load job detail')
+      setJobDetail(data)
+    } catch (e) {
+      setAuthError(e.message)
+    } finally {
+      setDetailLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadSession()
+  }, [])
+
+  useEffect(() => {
+    if (!authenticated) return
+    loadJobs()
+    const id = setInterval(loadJobs, 10000)
+    return () => clearInterval(id)
+  }, [authenticated, statusFilter, search])
+
+  useEffect(() => {
+    if (!authenticated || !selectedJobId) return
+    loadJobDetail(selectedJobId)
+    const id = setInterval(() => loadJobDetail(selectedJobId), 12000)
+    return () => clearInterval(id)
+  }, [authenticated, selectedJobId, productStatusFilter, severityFilter])
+
+  const login = async () => {
+    setAuthError('')
+    try {
+      const res = await fetch('/api/admin-session', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: adminKey }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Login failed')
+      setAuthenticated(true)
+      setAdminKey('')
+      await loadJobs()
+    } catch (e) {
+      setAuthError(e.message)
+    }
+  }
+
+  const logout = async () => {
+    await fetch('/api/admin-session', { method: 'DELETE', credentials: 'include' })
+    setAuthenticated(false)
+    setSelectedJobId('')
+    setJobDetail(null)
+  }
+
+  const runJobAction = async (action) => {
+    if (!selectedJobId) return
+    setActionLoading(action)
+    setAuthError('')
+    try {
+      const res = await fetch('/api/admin-job-action', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jobId: selectedJobId, action }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || `Failed to ${action} job`)
+      await loadJobs()
+      await loadJobDetail(selectedJobId)
+    } catch (e) {
+      setAuthError(e.message)
+    } finally {
+      setActionLoading('')
+    }
+  }
+
+  if (authLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Spinner />
+      </div>
+    )
+  }
+
+  return (
+    <div style={{ minHeight: '100vh' }}>
+      <header style={{
+        borderBottom: '1px solid #18181b', padding: '16px 32px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: '#0a0a0b', position: 'sticky', top: 0, zIndex: 50,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 30, height: 30, borderRadius: 7, background: 'linear-gradient(135deg, #7e22ce, #c084fc)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, fontWeight: 900, color: '#fff' }}>A</div>
+          <div>
+            <div style={{ fontWeight: 800, fontSize: 15 }}>Queue Admin</div>
+            <div style={{ fontSize: 11, color: '#71717a' }}>Audit jobs, failures, controls, reports</div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button onClick={onBack} style={{ ...btn, background: '#111114', color: '#a1a1aa', border: '1px solid #27272a' }}>Audit Tool</button>
+          {authenticated && <button onClick={logout} style={{ ...btn, background: '#111114', color: '#fda4af', border: '1px solid #3f1d2e' }}>Logout</button>}
+        </div>
+      </header>
+
+      <main style={{ maxWidth: 1380, margin: '0 auto', padding: '28px 24px 48px' }}>
+        {!authenticated ? (
+          <div style={{ maxWidth: 420, margin: '96px auto 0', background: '#0f0f13', border: '1px solid #26262f', borderRadius: 18, padding: 24 }}>
+            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#a78bfa', marginBottom: 10 }}>Admin Access</div>
+            <h1 style={{ fontSize: 30, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 8 }}>Queue dashboard</h1>
+            <p style={{ fontSize: 14, color: '#71717a', marginBottom: 18 }}>Server-side admin session. No API keys in browser requests after login.</p>
+            <input
+              type="password"
+              placeholder="Admin dashboard key"
+              value={adminKey}
+              onChange={e => setAdminKey(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && adminKey && login()}
+              style={inputStyle}
+            />
+            <button onClick={login} disabled={!adminKey} style={{ ...btn, width: '100%', marginTop: 12, padding: '14px 16px', background: adminKey ? 'linear-gradient(135deg, #581c87, #7c3aed)' : '#18181b', color: '#fff', fontWeight: 700 }}>
+              Login
+            </button>
+            {authError && <div style={errorBox}>{authError}</div>}
+          </div>
+        ) : (
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))', gap: 10, marginBottom: 18 }}>
+              {[
+                ['Total', jobsData.counts?.total || 0, '#f4f4f5'],
+                ['Queued', jobsData.counts?.queued || 0, '#93c5fd'],
+                ['Discovering', jobsData.counts?.discovering || 0, '#60a5fa'],
+                ['Running', jobsData.counts?.processing || 0, '#c084fc'],
+                ['Failed', jobsData.counts?.failed || 0, '#f87171'],
+                ['Completed', jobsData.counts?.completed || 0, '#4ade80'],
+              ].map(([label, value, color]) => (
+                <div key={label} style={{ background: '#0f0f13', border: '1px solid #24242b', borderRadius: 14, padding: 16 }}>
+                  <div style={{ fontSize: 11, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{label}</div>
+                  <div style={{ fontSize: 30, fontWeight: 800, color }}>{value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '380px minmax(0, 1fr)', gap: 16 }}>
+              <section style={{ background: '#0f0f13', border: '1px solid #24242b', borderRadius: 18, overflow: 'hidden' }}>
+                <div style={{ padding: 16, borderBottom: '1px solid #1f1f26' }}>
+                  <div style={{ fontSize: 18, fontWeight: 800, marginBottom: 12 }}>Jobs</div>
+                  <div style={{ display: 'grid', gap: 10 }}>
+                    <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search by URL or job id" style={inputStyle} />
+                    <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ ...inputStyle, appearance: 'none' }}>
+                      {['all', 'queued', 'discovering', 'processing', 'completed', 'failed', 'canceled'].map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div style={{ maxHeight: 'calc(100vh - 290px)', overflowY: 'auto' }}>
+                  {jobsLoading && <div style={{ padding: 18, color: '#71717a' }}>Loading jobs...</div>}
+                  {!jobsLoading && jobsData.jobs?.map(job => (
+                    <button
+                      key={job.id}
+                      onClick={() => setSelectedJobId(job.id)}
+                      style={{
+                        width: '100%',
+                        textAlign: 'left',
+                        padding: 16,
+                        background: selectedJobId === job.id ? '#161320' : 'transparent',
+                        border: 'none',
+                        borderBottom: '1px solid #1a1a21',
+                        color: '#e4e4e7',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{job.normalized_store_url}</div>
+                        <StatusPill value={job.status} />
+                      </div>
+                      <div style={{ fontSize: 11, color: '#71717a', marginBottom: 8 }}>{job.id}</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#a1a1aa' }}>
+                        <span>{job.category || 'All categories'}</span>
+                        <span>{job.progress_pct}%</span>
+                      </div>
+                      <div style={{ height: 4, background: '#1f1f26', borderRadius: 999, overflow: 'hidden', marginTop: 8 }}>
+                        <div style={{ width: `${job.progress_pct || 0}%`, height: '100%', background: 'linear-gradient(90deg, #7e22ce, #c084fc)' }} />
+                      </div>
+                      <div style={{ display: 'flex', gap: 12, marginTop: 10, fontSize: 11, color: '#71717a' }}>
+                        <span>{job.processed_products}/{job.total_products || 0} processed</span>
+                        <span>{job.failed_products} failed</span>
+                      </div>
+                    </button>
+                  ))}
+                  {!jobsLoading && !jobsData.jobs?.length && <div style={{ padding: 18, color: '#71717a' }}>No jobs found.</div>}
+                </div>
+              </section>
+
+              <section style={{ background: '#0f0f13', border: '1px solid #24242b', borderRadius: 18, minHeight: 720 }}>
+                {!selectedJobId ? (
+                  <div style={{ padding: 28, color: '#71717a' }}>Select a job.</div>
+                ) : detailLoading && !jobDetail ? (
+                  <div style={{ padding: 28 }}><Spinner /></div>
+                ) : jobDetail ? (
+                  <div style={{ padding: 18 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, alignItems: 'flex-start', marginBottom: 18 }}>
+                      <div>
+                        <div style={{ fontSize: 11, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>Job</div>
+                        <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 6 }}>{jobDetail.normalized_store_url}</div>
+                        <div style={{ fontSize: 12, color: '#71717a' }}>{jobDetail.id} · {jobDetail.category || 'All categories'} · updated {new Date(jobDetail.updated_at).toLocaleString()}</div>
+                      </div>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => runJobAction('stop')} disabled={actionLoading === 'stop'} style={{ ...btn, background: '#2a1117', color: '#fda4af', border: '1px solid #4c1d2f' }}>{actionLoading === 'stop' ? 'Stopping...' : 'Stop Job'}</button>
+                        <button onClick={() => runJobAction('restart')} disabled={actionLoading === 'restart'} style={{ ...btn, background: '#15122a', color: '#c4b5fd', border: '1px solid #312e81' }}>{actionLoading === 'restart' ? 'Restarting...' : 'Restart Job'}</button>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 10, marginBottom: 18 }}>
+                      {[
+                        ['Status', jobDetail.status, '#f4f4f5'],
+                        ['Progress', `${jobDetail.progress_pct}%`, '#c084fc'],
+                        ['Processed', jobDetail.processed_products, '#4ade80'],
+                        ['Failed', jobDetail.failed_products, '#f87171'],
+                        ['Queued', jobDetail.queued_products, '#93c5fd'],
+                      ].map(([label, value, color]) => (
+                        <div key={label} style={{ background: '#111114', border: '1px solid #1f1f26', borderRadius: 14, padding: 14 }}>
+                          <div style={{ fontSize: 11, color: '#71717a', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6 }}>{label}</div>
+                          <div style={{ fontSize: 24, fontWeight: 800, color }}>{value}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ height: 6, background: '#1f1f26', borderRadius: 999, overflow: 'hidden', marginBottom: 18 }}>
+                      <div style={{ width: `${jobDetail.progress_pct || 0}%`, height: '100%', background: 'linear-gradient(90deg, #7e22ce, #c084fc)' }} />
+                    </div>
+
+                    {(jobDetail.last_error || jobDetail.failedUrls?.length > 0) && (
+                      <div style={{ background: '#1a0e11', border: '1px solid #4c1d2f', borderRadius: 14, padding: 16, marginBottom: 18 }}>
+                        <div style={{ fontSize: 13, fontWeight: 800, color: '#fda4af', marginBottom: 10 }}>Failures</div>
+                        {jobDetail.last_error && <div style={{ fontSize: 13, color: '#fecdd3', marginBottom: 10 }}>Job error: {jobDetail.last_error}</div>}
+                        {jobDetail.failedUrls?.length > 0 && (
+                          <div style={{ display: 'grid', gap: 8 }}>
+                            {jobDetail.failedUrls.map((item, idx) => (
+                              <div key={idx} style={{ background: '#120b0d', border: '1px solid #3a1823', borderRadius: 10, padding: 12 }}>
+                                <div style={{ fontSize: 13, fontWeight: 700, color: '#f4f4f5' }}>{item.productTitle}</div>
+                                <div style={{ fontSize: 11, color: '#a1a1aa', margin: '4px 0' }}>{item.productUrl || 'No product URL'}</div>
+                                <div style={{ fontSize: 12, color: '#fca5a5' }}>{item.errorMessage || 'Failed URL processing'}</div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 10, marginBottom: 18 }}>
+                      {[
+                        ['Critical', jobDetail.stats?.critical || 0, '#c084fc'],
+                        ['High', jobDetail.stats?.high || 0, '#f87171'],
+                        ['Medium', jobDetail.stats?.medium || 0, '#fb923c'],
+                        ['Low', jobDetail.stats?.low || 0, '#facc15'],
+                      ].map(([label, value, color]) => (
+                        <div key={label} style={{ background: '#111114', border: '1px solid #1f1f26', borderRadius: 14, padding: 14 }}>
+                          <div style={{ fontSize: 11, color: '#71717a', marginBottom: 6 }}>{label}</div>
+                          <div style={{ fontSize: 26, fontWeight: 800, color }}>{value}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 180px 180px', gap: 10, marginBottom: 16 }}>
+                      <input value={''} readOnly placeholder="Processed product report" style={{ ...inputStyle, color: '#71717a' }} />
+                      <select value={productStatusFilter} onChange={e => setProductStatusFilter(e.target.value)} style={{ ...inputStyle, appearance: 'none' }}>
+                        {['all', 'queued', 'processing', 'processed', 'failed'].map(option => <option key={option} value={option}>{option}</option>)}
+                      </select>
+                      <select value={severityFilter} onChange={e => setSeverityFilter(e.target.value)} style={{ ...inputStyle, appearance: 'none' }}>
+                        {['all', 'critical', 'high', 'medium', 'low', 'info', 'none'].map(option => <option key={option} value={option}>{option}</option>)}
+                      </select>
+                    </div>
+
+                    <div style={{ display: 'grid', gap: 10, maxHeight: 'calc(100vh - 470px)', overflowY: 'auto', paddingRight: 4 }}>
+                      {jobDetail.products?.map((product) => (
+                        <AdminProductRow key={product.id} product={product} />
+                      ))}
+                      {!jobDetail.products?.length && <div style={{ color: '#71717a', fontSize: 13 }}>No products for current filters.</div>}
+                    </div>
+                    {authError && <div style={errorBox}>{authError}</div>}
+                  </div>
+                ) : (
+                  <div style={{ padding: 28, color: '#71717a' }}>Job not found.</div>
+                )}
+              </section>
+            </div>
+          </>
+        )}
+      </main>
+    </div>
+  )
+}
+
+function AdminProductRow({ product }) {
+  const analysis = product.analysis || null
+  const issues = collectIssues(analysis)
+  const severity = analysis?.severity || product.result_severity || (product.status === 'failed' ? 'high' : 'none')
+  const sev = SEV[severity] || SEV.none
+
+  return (
+    <details style={{ background: '#111114', border: `1px solid ${sev.border}`, borderRadius: 14, overflow: 'hidden' }}>
+      <summary style={{ listStyle: 'none', cursor: 'pointer', padding: 14, display: 'grid', gridTemplateColumns: '110px 1fr 90px 90px', gap: 12, alignItems: 'center' }}>
+        <StatusPill value={product.status} />
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: '#f4f4f5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.product_title}</div>
+          <div style={{ fontSize: 11, color: '#71717a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{product.product_url || 'No URL'}</div>
+        </div>
+        <span style={{ fontSize: 12, fontWeight: 700, color: sev.text, textTransform: 'uppercase' }}>{severity}</span>
+        <span style={{ fontSize: 12, color: '#a78bfa', textAlign: 'right' }}>Details</span>
+      </summary>
+      <div style={{ padding: '0 14px 14px' }}>
+        {product.error_message && (
+          <div style={{ background: '#1a0e11', border: '1px solid #4c1d2f', borderRadius: 10, padding: 12, color: '#fca5a5', marginBottom: 10 }}>
+            {product.error_message}
+          </div>
+        )}
+        <div style={{ fontSize: 13, color: '#d4d4d8', marginBottom: 10 }}>{product.result_summary || analysis?.summary || 'No summary available.'}</div>
+        {analysis?.performance && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10, marginBottom: 12 }}>
+            <div style={{ background: '#0d1320', border: '1px solid #1e3a5f', borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 11, color: '#93c5fd', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5 }}>Page Load</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#e4e4e7' }}>{formatDuration(analysis.performance.pageLoadMs)}</div>
+            </div>
+            <div style={{ background: '#15121d', border: '1px solid #312e81', borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 11, color: '#c4b5fd', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5 }}>Image Payload</div>
+              <div style={{ fontSize: 22, fontWeight: 800, color: '#e4e4e7' }}>{formatBytes(analysis.performance.totalImageBytes)}</div>
+            </div>
+          </div>
+        )}
+        {issues.length > 0 && (
+          <div style={{ display: 'grid', gap: 8, marginBottom: 10 }}>
+            {issues.map((issue, idx) => {
+              const tone = SEV[issue.severity] || SEV.low
+              return (
+                <div key={idx} style={{ background: '#0f0f13', border: `1px solid ${tone.border}`, borderRadius: 10, padding: 12 }}>
+                  <div style={{ fontSize: 11, color: tone.text, textTransform: 'uppercase', fontWeight: 700, marginBottom: 4 }}>{issue.severity}</div>
+                  <div style={{ fontSize: 13, color: '#d4d4d8' }}>{issue.detail}</div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+        {analysis?.missing?.length > 0 && (
+          <div style={{ fontSize: 12, color: '#c4b5fd', background: '#1b1030', border: '1px solid #4c1d95', borderRadius: 10, padding: 12 }}>
+            <strong>Missing:</strong> {analysis.missing.join(' · ')}
+          </div>
+        )}
+      </div>
+    </details>
+  )
+}
+
+function StatusPill({ value }) {
+  const map = {
+    queued: { bg: '#0c1b2a', border: '#1d4ed8', color: '#93c5fd' },
+    discovering: { bg: '#0b1728', border: '#2563eb', color: '#60a5fa' },
+    processing: { bg: '#180d26', border: '#7e22ce', color: '#c084fc' },
+    completed: { bg: '#082114', border: '#166534', color: '#4ade80' },
+    failed: { bg: '#2a1117', border: '#7f1d1d', color: '#f87171' },
+    canceled: { bg: '#171717', border: '#3f3f46', color: '#a1a1aa' },
+    processed: { bg: '#082114', border: '#166534', color: '#4ade80' },
+  }
+  const tone = map[value] || map.canceled
+  return (
+    <span style={{ display: 'inline-flex', width: 'fit-content', alignItems: 'center', justifyContent: 'center', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: tone.color, background: tone.bg, border: `1px solid ${tone.border}`, borderRadius: 999, padding: '4px 10px' }}>
+      {value}
+    </span>
   )
 }
 
