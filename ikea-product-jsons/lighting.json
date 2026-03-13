@@ -1,0 +1,284 @@
+{
+  "products": [
+    {
+      "title": "HEKTAR Pendant lamp",
+      "handle": "hektar-pendant-lamp-dark-gray",
+      "product_type": "Pendant lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hektar-pendant-lamp-dark-gray__0149974_pe308042_s5.jpg",
+          "alt": "HEKTAR Pendant lamp, dark gray, 19\"",
+          "variant_ids": [5001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hektar-pendant-lamp-dark-gray__0149975_pe308043_s5.jpg",
+          "alt": "",
+          "variant_ids": [5001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hektar-pendant-lamp-dark-gray__0836027_pe308044_s5.jpg",
+          "alt": "HEKTAR Pendant lamp installed",
+          "variant_ids": [5001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5001,
+          "title": "Dark gray / 19\"",
+          "available": true,
+          "option1": "Dark gray",
+          "option2": "19\"",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "RANARP Floor/reading lamp",
+      "handle": "ranarp-floor-reading-lamp-black",
+      "product_type": "Floor lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ranarp-floor-reading-lamp-black__0473217_pe614537_s5.jpg",
+          "alt": "RANARP Floor/reading lamp, black",
+          "variant_ids": [5002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ranarp-floor-reading-lamp-black__0473218_pe614538_s5.jpg",
+          "alt": "",
+          "variant_ids": [5002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ranarp-floor-reading-lamp-black__0836895_pe614539_s5.jpg",
+          "alt": "",
+          "variant_ids": [5002]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5002,
+          "title": "Black",
+          "available": true,
+          "option1": "Black",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "TERTIAL Work lamp",
+      "handle": "tertial-work-lamp-dark-gray",
+      "product_type": "Work lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tertial-work-lamp-dark-gray__0879899_pe614424_s5.jpg",
+          "alt": "TERTIAL Work lamp, dark gray",
+          "variant_ids": [5003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tertial-work-lamp-dark-gray__0879900_pe614425_s5.jpg",
+          "alt": "",
+          "variant_ids": [5003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tertial-work-lamp-dark-gray__0879901_pe614426_s5.jpg",
+          "alt": "",
+          "variant_ids": [5003]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5003,
+          "title": "Dark gray",
+          "available": true,
+          "option1": "Dark gray",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SINNERLIG Pendant lamp",
+      "handle": "sinnerlig-pendant-lamp-bamboo",
+      "product_type": "Pendant lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sinnerlig-pendant-lamp-bamboo__0477375_pe616826_s5.jpg",
+          "alt": "SINNERLIG Pendant lamp, bamboo",
+          "variant_ids": [5004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sinnerlig-pendant-lamp-bamboo__0477376_pe616827_s5.jpg",
+          "alt": "",
+          "variant_ids": [5004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sinnerlig-pendant-lamp-bamboo__0836948_pe616828_s5.jpg",
+          "alt": "",
+          "variant_ids": [5004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5004,
+          "title": "Bamboo",
+          "available": true,
+          "option1": "Bamboo",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SKURUP Floor lamp",
+      "handle": "skurup-floor-lamp-black",
+      "product_type": "Floor lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/skurup-floor-lamp-black__0637825_pe698518_s5.jpg",
+          "alt": "SKURUP Floor lamp, black",
+          "variant_ids": [5005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/skurup-floor-lamp-black__0637826_pe698519_s5.jpg",
+          "alt": "",
+          "variant_ids": [5005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/skurup-floor-lamp-black__0860771_pe698520_s5.jpg",
+          "alt": "",
+          "variant_ids": [5005]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5005,
+          "title": "Black",
+          "available": true,
+          "option1": "Black",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SYMFONISK Speaker lamp with WiFi",
+      "handle": "symfonisk-speaker-lamp-wifi-textile-shade-white",
+      "product_type": "Smart lighting",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/symfonisk-speaker-lamp-w-wi-fi-textile-shade-white__0810823_pe771277_s5.jpg",
+          "alt": "SYMFONISK Speaker lamp with WiFi, textile shade, white",
+          "variant_ids": [5006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/symfonisk-speaker-lamp-w-wi-fi-textile-shade-white__0810824_pe771278_s5.jpg",
+          "alt": "",
+          "variant_ids": [5006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/symfonisk-speaker-lamp-w-wi-fi-textile-shade-white__0810825_pe771279_s5.jpg",
+          "alt": "",
+          "variant_ids": [5006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5006,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 5007,
+          "title": "Black",
+          "available": true,
+          "option1": "Black",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "NÄVLINGE LED clamp spotlight",
+      "handle": "navlinge-led-clamp-spotlight-white",
+      "product_type": "Work lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/navlinge-led-clamp-spotlight-white__0710234_pe727111_s5.jpg",
+          "alt": "NÄVLINGE LED clamp spotlight, white",
+          "variant_ids": [5008]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/navlinge-led-clamp-spotlight-white__0710235_pe727112_s5.jpg",
+          "alt": "",
+          "variant_ids": [5008]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/navlinge-led-clamp-spotlight-white__0710236_pe727113_s5.jpg",
+          "alt": "",
+          "variant_ids": [5008]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5008,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 5009,
+          "title": "Black",
+          "available": true,
+          "option1": "Black",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "ARSTID Table lamp",
+      "handle": "arstid-table-lamp-nickel-plated-white",
+      "product_type": "Table lamps",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/arstid-table-lamp-nickel-plated-white__0320540_pe514289_s5.jpg",
+          "alt": "ÅRSTID Table lamp, nickel plated/white",
+          "variant_ids": [5010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/arstid-table-lamp-nickel-plated-white__0320541_pe514290_s5.jpg",
+          "alt": "",
+          "variant_ids": [5010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/arstid-table-lamp-nickel-plated-white__0836001_pe514291_s5.jpg",
+          "alt": "",
+          "variant_ids": [5010]
+        }
+      ],
+      "variants": [
+        {
+          "id": 5010,
+          "title": "Nickel plated/white",
+          "available": true,
+          "option1": "Nickel plated/white",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

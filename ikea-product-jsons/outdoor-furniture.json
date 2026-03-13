@@ -1,0 +1,235 @@
+{
+  "products": [
+    {
+      "title": "ÄPPLARÖ Table+4 folding chairs, outdoor",
+      "handle": "applaro-table-4-folding-chairs-outdoor-brown-stained",
+      "product_type": "Outdoor dining sets",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/applaro-table-4-folding-chairs-outdoor-brown-stained__0673572_pe717073_s5.jpg",
+          "alt": "ÄPPLARÖ Table+4 folding chairs, outdoor, brown stained",
+          "variant_ids": [9001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/applaro-table-4-folding-chairs-outdoor-brown-stained__0673573_pe717074_s5.jpg",
+          "alt": "",
+          "variant_ids": [9001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/applaro-table-4-folding-chairs-outdoor-brown-stained__0673574_pe717075_s5.jpg",
+          "alt": "ÄPPLARÖ set on patio",
+          "variant_ids": [9001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9001,
+          "title": "Brown stained",
+          "available": true,
+          "option1": "Brown stained",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "KUNGSO Modular corner sofa 3-seat, outdoor",
+      "handle": "kungso-modular-corner-sofa-3-seat-outdoor",
+      "product_type": "Outdoor sofas",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kungso-modular-corner-sofa-3-seat-outdoor__1121839_pe874878_s5.jpg",
+          "alt": "KUNGSÖ Modular corner sofa 3-seat, outdoor",
+          "variant_ids": [9002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kungso-modular-corner-sofa-3-seat-outdoor__1121840_pe874879_s5.jpg",
+          "alt": "",
+          "variant_ids": [9002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kungso-modular-corner-sofa-3-seat-outdoor__1121841_pe874880_s5.jpg",
+          "alt": "",
+          "variant_ids": [9002]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9002,
+          "title": "Dark gray",
+          "available": true,
+          "option1": "Dark gray",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "TÄRNÖ Table+2 chairs, outdoor",
+      "handle": "tarno-table-2-chairs-outdoor-black-light-brown-stained",
+      "product_type": "Outdoor dining sets",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tarno-table-2-chairs-outdoor-black-light-brown-stained__0730498_pe737800_s5.jpg",
+          "alt": "TÄRNÖ Table+2 chairs, outdoor, black/light brown stained",
+          "variant_ids": [9003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tarno-table-2-chairs-outdoor-black-light-brown-stained__0730499_pe737801_s5.jpg",
+          "alt": "",
+          "variant_ids": [9003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tarno-table-2-chairs-outdoor-black-light-brown-stained__0730500_pe737802_s5.jpg",
+          "alt": "",
+          "variant_ids": [9003]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9003,
+          "title": "Black/light brown stained",
+          "available": true,
+          "option1": "Black/light brown stained",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SOLLERÖN Modular corner sofa 4-seat, outdoor",
+      "handle": "solleron-modular-corner-sofa-4-seat-outdoor-dark-gray-froson-duvholmen-dark-gray",
+      "product_type": "Outdoor sofas",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/solleron-modular-corner-sofa-4-seat-outdoor-dark-gray-froson-duvholmen-dark-gray__0686905_pe722277_s5.jpg",
+          "alt": "SOLLERÖN Modular corner sofa 4-seat, outdoor, dark gray/Frösön/Duvholmen dark gray",
+          "variant_ids": [9004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/solleron-modular-corner-sofa-4-seat-outdoor-dark-gray-froson-duvholmen-dark-gray__0686906_pe722278_s5.jpg",
+          "alt": "",
+          "variant_ids": [9004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/solleron-modular-corner-sofa-4-seat-outdoor-dark-gray-froson-duvholmen-dark-gray__0686907_pe722279_s5.jpg",
+          "alt": "",
+          "variant_ids": [9004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9004,
+          "title": "Dark gray / Frösön/Duvholmen dark gray",
+          "available": true,
+          "option1": "Dark gray",
+          "option2": "Frösön/Duvholmen dark gray",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "FALHOLMEN Table, outdoor",
+      "handle": "falholmen-table-outdoor-light-brown-stained",
+      "product_type": "Outdoor tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/falholmen-table-outdoor-light-brown-stained__0606839_pe682392_s5.jpg",
+          "alt": "FALHOLMEN Table, outdoor, light brown stained",
+          "variant_ids": [9005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/falholmen-table-outdoor-light-brown-stained__0606840_pe682393_s5.jpg",
+          "alt": "",
+          "variant_ids": [9005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/falholmen-table-outdoor-light-brown-stained__0606841_pe682394_s5.jpg",
+          "alt": "",
+          "variant_ids": [9005]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9005,
+          "title": "Light brown stained",
+          "available": true,
+          "option1": "Light brown stained",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "HAVSTEN Loveseat, in/outdoor",
+      "handle": "havsten-loveseat-in-outdoor-beige",
+      "product_type": "Outdoor sofas",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/havsten-loveseat-in-outdoor-beige__0587764_pe672605_s5.jpg",
+          "alt": "HAVSTEN Loveseat, in/outdoor, beige",
+          "variant_ids": [9006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/havsten-loveseat-in-outdoor-beige__0587765_pe672606_s5.jpg",
+          "alt": "",
+          "variant_ids": [9006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/havsten-loveseat-in-outdoor-beige__0587766_pe672607_s5.jpg",
+          "alt": "",
+          "variant_ids": [9006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9006,
+          "title": "Beige",
+          "available": true,
+          "option1": "Beige",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "NÄMMARÖ Table, outdoor",
+      "handle": "nammaro-table-outdoor-light-brown-stained",
+      "product_type": "Outdoor tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/nammaro-table-outdoor-light-brown-stained__1013891_pe829677_s5.jpg",
+          "alt": "NÄMMARÖ Table, outdoor, light brown stained",
+          "variant_ids": [9007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/nammaro-table-outdoor-light-brown-stained__1013892_pe829678_s5.jpg",
+          "alt": "",
+          "variant_ids": [9007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/nammaro-table-outdoor-light-brown-stained__1013893_pe829679_s5.jpg",
+          "alt": "",
+          "variant_ids": [9007]
+        }
+      ],
+      "variants": [
+        {
+          "id": 9007,
+          "title": "Light brown stained",
+          "available": true,
+          "option1": "Light brown stained",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

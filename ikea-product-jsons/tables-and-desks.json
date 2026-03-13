@@ -1,0 +1,308 @@
+{
+  "products": [
+    {
+      "title": "LACK Coffee table",
+      "handle": "lack-coffee-table-black-brown",
+      "product_type": "Coffee tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lack-coffee-table-black-brown__0702214_pe724347_s5.jpg",
+          "alt": "LACK Coffee table, black-brown, 35 3/8x21 5/8\"",
+          "variant_ids": [4001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lack-coffee-table-black-brown__0702215_pe724348_s5.jpg",
+          "alt": "",
+          "variant_ids": [4001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lack-coffee-table-black-brown__0836875_pe724349_s5.jpg",
+          "alt": "",
+          "variant_ids": [4001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4001,
+          "title": "Black-brown",
+          "available": true,
+          "option1": "Black-brown",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 4002,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "LAGKAPTEN / ALEX Desk",
+      "handle": "lagkapten-alex-desk-white",
+      "product_type": "Desks",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lagkapten-alex-desk-white__0978741_pe813716_s5.jpg",
+          "alt": "LAGKAPTEN / ALEX Desk, white, 55 1/8x23 5/8\"",
+          "variant_ids": [4003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lagkapten-alex-desk-white__0978742_pe813717_s5.jpg",
+          "alt": "",
+          "variant_ids": [4003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lagkapten-alex-desk-white__0978743_pe813718_s5.jpg",
+          "alt": "",
+          "variant_ids": [4003]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4003,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BEKANT Desk sit/stand",
+      "handle": "bekant-desk-sit-stand-white",
+      "product_type": "Desks",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/bekant-desk-sit-stand-white__0735706_pe740044_s5.jpg",
+          "alt": "BEKANT Desk sit/stand, white, 63x31 1/2\"",
+          "variant_ids": [4004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/bekant-desk-sit-stand-white__0735707_pe740045_s5.jpg",
+          "alt": "",
+          "variant_ids": [4004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/bekant-desk-sit-stand-white__0735708_pe740046_s5.jpg",
+          "alt": "BEKANT standing position",
+          "variant_ids": [4004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4004,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "LISABO Table",
+      "handle": "lisabo-table-ash-veneer",
+      "product_type": "Dining tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lisabo-table-ash-veneer__0546181_pe655823_s5.jpg",
+          "alt": "LISABO Table, ash veneer, 55 1/8x30 3/4\"",
+          "variant_ids": [4005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lisabo-table-ash-veneer__0546182_pe655824_s5.jpg",
+          "alt": "",
+          "variant_ids": [4005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lisabo-table-ash-veneer__0546183_pe655825_s5.jpg",
+          "alt": "",
+          "variant_ids": [4005]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4005,
+          "title": "Ash veneer",
+          "available": true,
+          "option1": "Ash veneer",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "MITTZON Desk",
+      "handle": "mittzon-desk-walnut-veneer-black",
+      "product_type": "Desks",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/mittzon-desk-walnut-veneer-black__1152946_pe884851_s5.jpg",
+          "alt": "MITTZON Desk, walnut veneer/black, 55 1/8x23 5/8\"",
+          "variant_ids": [4006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/mittzon-desk-walnut-veneer-black__1152947_pe884852_s5.jpg",
+          "alt": "",
+          "variant_ids": [4006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/mittzon-desk-walnut-veneer-black__1152948_pe884853_s5.jpg",
+          "alt": "",
+          "variant_ids": [4006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4006,
+          "title": "Walnut veneer/black",
+          "available": true,
+          "option1": "Walnut veneer",
+          "option2": "Black",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "LACK Side table",
+      "handle": "lack-side-table-white",
+      "product_type": "Side tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lack-side-table-white__0702205_pe724345_s5.jpg",
+          "alt": "LACK Side table, white, 21 5/8x21 5/8\"",
+          "variant_ids": [4007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lack-side-table-white__0702206_pe724346_s5.jpg",
+          "alt": "",
+          "variant_ids": [4007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lack-side-table-white__0836871_pe724344_s5.jpg",
+          "alt": "",
+          "variant_ids": [4007]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4007,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 4008,
+          "title": "Black",
+          "available": true,
+          "option1": "Black",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 4009,
+          "title": "Black-brown",
+          "available": true,
+          "option1": "Black-brown",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "EKEDALEN Extendable table",
+      "handle": "ekedalen-extendable-table-dark-brown",
+      "product_type": "Dining tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ekedalen-extendable-table-dark-brown__0515960_pe640073_s5.jpg",
+          "alt": "EKEDALEN Extendable table, dark brown, 47 1/4/70 7/8x31 1/2\"",
+          "variant_ids": [4010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ekedalen-extendable-table-dark-brown__0515961_pe640074_s5.jpg",
+          "alt": "",
+          "variant_ids": [4010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ekedalen-extendable-table-dark-brown__0515962_pe640075_s5.jpg",
+          "alt": "EKEDALEN table extended",
+          "variant_ids": [4010]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4010,
+          "title": "Dark brown",
+          "available": true,
+          "option1": "Dark brown",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 4011,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "MICKE Desk",
+      "handle": "micke-desk-white",
+      "product_type": "Desks",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/micke-desk-white__0736017_pe740347_s5.jpg",
+          "alt": "MICKE Desk, white, 41 3/8x19 5/8\"",
+          "variant_ids": [4012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/micke-desk-white__0736018_pe740348_s5.jpg",
+          "alt": "",
+          "variant_ids": [4012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/micke-desk-white__0736019_pe740349_s5.jpg",
+          "alt": "",
+          "variant_ids": [4012]
+        }
+      ],
+      "variants": [
+        {
+          "id": 4012,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 4013,
+          "title": "Black-brown",
+          "available": true,
+          "option1": "Black-brown",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

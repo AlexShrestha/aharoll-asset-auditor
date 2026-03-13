@@ -1,0 +1,284 @@
+{
+  "products": [
+    {
+      "title": "METOD Base cabinet with shelves",
+      "handle": "metod-base-cabinet-with-shelves-white-voxtorp-dark-gray",
+      "product_type": "Kitchen cabinets",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/metod-base-cabinet-with-shelves-white-voxtorp-dark-gray__0568312_pe664870_s5.jpg",
+          "alt": "METOD Base cabinet with shelves, white/Voxtorp dark gray",
+          "variant_ids": [6001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/metod-base-cabinet-with-shelves-white-voxtorp-dark-gray__0568313_pe664871_s5.jpg",
+          "alt": "",
+          "variant_ids": [6001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/metod-base-cabinet-with-shelves-white-voxtorp-dark-gray__0568314_pe664872_s5.jpg",
+          "alt": "METOD cabinet interior",
+          "variant_ids": [6001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6001,
+          "title": "White/Voxtorp dark gray",
+          "available": true,
+          "option1": "White/Voxtorp dark gray",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "VARDAGEN Frying pan",
+      "handle": "vardagen-frying-pan-cast-iron",
+      "product_type": "Cookware",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/vardagen-frying-pan-cast-iron__0710199_pe727093_s5.jpg",
+          "alt": "VARDAGEN Frying pan, cast iron, 11\"",
+          "variant_ids": [6002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/vardagen-frying-pan-cast-iron__0710200_pe727094_s5.jpg",
+          "alt": "",
+          "variant_ids": [6002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/vardagen-frying-pan-cast-iron__0710201_pe727095_s5.jpg",
+          "alt": "",
+          "variant_ids": [6002]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6002,
+          "title": "Cast iron / 11\"",
+          "available": true,
+          "option1": "Cast iron",
+          "option2": "11\"",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "DINERA Plate",
+      "handle": "dinera-plate-beige",
+      "product_type": "Plates",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/dinera-plate-beige__0713449_pe729502_s5.jpg",
+          "alt": "DINERA Plate, beige, 10\"",
+          "variant_ids": [6003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/dinera-plate-beige__0713450_pe729503_s5.jpg",
+          "alt": "",
+          "variant_ids": [6003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/dinera-plate-beige__0713451_pe729504_s5.jpg",
+          "alt": "",
+          "variant_ids": [6003]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6003,
+          "title": "Beige",
+          "available": true,
+          "option1": "Beige",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 6004,
+          "title": "Dark gray",
+          "available": true,
+          "option1": "Dark gray",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "IKEA 365+ Food container with lid",
+      "handle": "ikea-365-food-container-with-lid-rectangular-glass-plastic",
+      "product_type": "Food storage",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ikea-365-food-container-with-lid-rectangular-glass-plastic__0668620_pe714392_s5.jpg",
+          "alt": "IKEA 365+ Food container with lid, rectangular/glass plastic, 34 oz",
+          "variant_ids": [6005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ikea-365-food-container-with-lid-rectangular-glass-plastic__0668621_pe714393_s5.jpg",
+          "alt": "",
+          "variant_ids": [6005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ikea-365-food-container-with-lid-rectangular-glass-plastic__0668622_pe714394_s5.jpg",
+          "alt": "",
+          "variant_ids": [6005]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6005,
+          "title": "Rectangular / 34 oz",
+          "available": true,
+          "option1": "Rectangular",
+          "option2": "34 oz",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "KNOXHULT Kitchen",
+      "handle": "knoxhult-kitchen-white",
+      "product_type": "Kitchen cabinets",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/knoxhult-kitchen-white__0644698_pe702905_s5.jpg",
+          "alt": "KNOXHULT Kitchen, white, 48x24x85\"",
+          "variant_ids": [6006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/knoxhult-kitchen-white__0644699_pe702906_s5.jpg",
+          "alt": "",
+          "variant_ids": [6006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/knoxhult-kitchen-white__0644700_pe702907_s5.jpg",
+          "alt": "KNOXHULT Kitchen styled",
+          "variant_ids": [6006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6006,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 6007,
+          "title": "Gray",
+          "available": true,
+          "option1": "Gray",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "FLÅDIS Basket",
+      "handle": "fladis-basket-seagrass",
+      "product_type": "Baskets",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/fladis-basket-seagrass__0474046_pe615040_s5.jpg",
+          "alt": "FLÅDIS Basket, seagrass, 9 7/8\"",
+          "variant_ids": [6008]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/fladis-basket-seagrass__0474047_pe615041_s5.jpg",
+          "alt": "",
+          "variant_ids": [6008]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/fladis-basket-seagrass__0836904_pe615042_s5.jpg",
+          "alt": "",
+          "variant_ids": [6008]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6008,
+          "title": "Seagrass",
+          "available": true,
+          "option1": "Seagrass",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "KORKEN Bottle with stopper",
+      "handle": "korken-bottle-with-stopper-clear-glass",
+      "product_type": "Bottles & carafes",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/korken-bottle-with-stopper-clear-glass__0713449_pe729502_s5.jpg",
+          "alt": "KORKEN Bottle with stopper, clear glass, 34 oz",
+          "variant_ids": [6009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/korken-bottle-with-stopper-clear-glass__0713450_pe729503_s5.jpg",
+          "alt": "",
+          "variant_ids": [6009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/korken-bottle-with-stopper-clear-glass__0713451_pe729504_s5.jpg",
+          "alt": "",
+          "variant_ids": [6009]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6009,
+          "title": "Clear glass / 34 oz",
+          "available": true,
+          "option1": "Clear glass",
+          "option2": "34 oz",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "KUNGSFORS Wall storage with grid",
+      "handle": "kungsfors-wall-storage-stainless-steel-ash",
+      "product_type": "Kitchen wall storage",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kungsfors-wall-storage-stainless-steel-ash__0616614_pe688429_s5.jpg",
+          "alt": "KUNGSFORS Wall storage, stainless steel/ash",
+          "variant_ids": [6010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kungsfors-wall-storage-stainless-steel-ash__0616615_pe688430_s5.jpg",
+          "alt": "",
+          "variant_ids": [6010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kungsfors-wall-storage-stainless-steel-ash__0616616_pe688431_s5.jpg",
+          "alt": "",
+          "variant_ids": [6010]
+        }
+      ],
+      "variants": [
+        {
+          "id": 6010,
+          "title": "Stainless steel/ash",
+          "available": true,
+          "option1": "Stainless steel/ash",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

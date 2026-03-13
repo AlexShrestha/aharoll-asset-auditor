@@ -1,0 +1,272 @@
+{
+  "products": [
+    {
+      "title": "KURA Reversible bed",
+      "handle": "kura-reversible-bed-white-pine",
+      "product_type": "Children's beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kura-reversible-bed-white-pine__0637941_pe698623_s5.jpg",
+          "alt": "KURA Reversible bed, white/pine",
+          "variant_ids": [10001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kura-reversible-bed-white-pine__0637942_pe698624_s5.jpg",
+          "alt": "",
+          "variant_ids": [10001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kura-reversible-bed-white-pine__0637943_pe698625_s5.jpg",
+          "alt": "KURA bed reversed",
+          "variant_ids": [10001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kura-reversible-bed-white-pine__0860789_pe698626_s5.jpg",
+          "alt": "",
+          "variant_ids": [10001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10001,
+          "title": "White/pine",
+          "available": true,
+          "option1": "White/pine",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SUNDVIK Crib",
+      "handle": "sundvik-crib-white",
+      "product_type": "Children's beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sundvik-crib-white__0637925_pe698609_s5.jpg",
+          "alt": "SUNDVIK Crib, white",
+          "variant_ids": [10002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sundvik-crib-white__0637926_pe698610_s5.jpg",
+          "alt": "",
+          "variant_ids": [10002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sundvik-crib-white__0637927_pe698611_s5.jpg",
+          "alt": "SUNDVIK Crib side lowered",
+          "variant_ids": [10002]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10002,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 10003,
+          "title": "Gray-brown",
+          "available": true,
+          "option1": "Gray-brown",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "FLISAT Children's table",
+      "handle": "flisat-childrens-table",
+      "product_type": "Children's tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/flisat-children-s-table__0735895_pe740108_s5.jpg",
+          "alt": "FLISAT Children's table, 32 5/8x22 7/8\"",
+          "variant_ids": [10004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/flisat-children-s-table__0735896_pe740109_s5.jpg",
+          "alt": "",
+          "variant_ids": [10004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/flisat-children-s-table__0735897_pe740110_s5.jpg",
+          "alt": "FLISAT table in use",
+          "variant_ids": [10004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10004,
+          "title": "Pine",
+          "available": true,
+          "option1": "Pine",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "STUVA / FRITIDS Loft bed with 3 drawers/2 doors",
+      "handle": "stuva-fritids-loft-bed-3-drawers-2-doors-white-white",
+      "product_type": "Children's beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/stuva-fritids-loft-bed-with-3-drawers-2-doors-white-white__0537120_pe649756_s5.jpg",
+          "alt": "STUVA / FRITIDS Loft bed with 3 drawers/2 doors, white/white",
+          "variant_ids": [10005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/stuva-fritids-loft-bed-with-3-drawers-2-doors-white-white__0537121_pe649757_s5.jpg",
+          "alt": "",
+          "variant_ids": [10005]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/stuva-fritids-loft-bed-with-3-drawers-2-doors-white-white__0537122_pe649758_s5.jpg",
+          "alt": "",
+          "variant_ids": [10005]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10005,
+          "title": "White/white",
+          "available": true,
+          "option1": "White",
+          "option2": "White doors",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "MAMMUT Children's chair",
+      "handle": "mammut-childrens-chair-in-outdoor-red",
+      "product_type": "Children's chairs",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/mammut-children-s-chair-in-outdoor-red__0727735_pe735929_s5.jpg",
+          "alt": "MAMMUT Children's chair, in/outdoor/red",
+          "variant_ids": [10006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/mammut-children-s-chair-in-outdoor-red__0727736_pe735930_s5.jpg",
+          "alt": "",
+          "variant_ids": [10006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/mammut-children-s-chair-in-outdoor-red__0727737_pe735931_s5.jpg",
+          "alt": "",
+          "variant_ids": [10006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10006,
+          "title": "Red",
+          "available": true,
+          "option1": "Red",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 10007,
+          "title": "Light blue",
+          "available": true,
+          "option1": "Light blue",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 10008,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BUSUNGE Extendable bed",
+      "handle": "busunge-extendable-bed-white",
+      "product_type": "Children's beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/busunge-extendable-bed-white__0637861_pe698571_s5.jpg",
+          "alt": "BUSUNGE Extendable bed, white, 38 1/4x74 3/4\"",
+          "variant_ids": [10009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/busunge-extendable-bed-white__0637862_pe698572_s5.jpg",
+          "alt": "",
+          "variant_ids": [10009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/busunge-extendable-bed-white__0637863_pe698573_s5.jpg",
+          "alt": "BUSUNGE Extendable bed extended",
+          "variant_ids": [10009]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10009,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 10010,
+          "title": "Light pink",
+          "available": true,
+          "option1": "Light pink",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SMÅGÖRA Changing table/bookshelf",
+      "handle": "smagora-changing-table-bookshelf-white",
+      "product_type": "Changing tables",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/smagora-changing-table-bookshelf-white__0756714_pe749295_s5.jpg",
+          "alt": "SMÅGÖRA Changing table/bookshelf, white",
+          "variant_ids": [10011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/smagora-changing-table-bookshelf-white__0756715_pe749296_s5.jpg",
+          "alt": "",
+          "variant_ids": [10011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/smagora-changing-table-bookshelf-white__0756716_pe749297_s5.jpg",
+          "alt": "SMÅGÖRA as bookshelf",
+          "variant_ids": [10011]
+        }
+      ],
+      "variants": [
+        {
+          "id": 10011,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

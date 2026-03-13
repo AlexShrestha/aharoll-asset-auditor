@@ -1,0 +1,316 @@
+{
+  "products": [
+    {
+      "title": "STOCKHOLM Rug, flatwoven",
+      "handle": "stockholm-rug-flatwoven-handmade-striped-black-off-white",
+      "product_type": "Rugs",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/stockholm-rug-flatwoven-handmade-striped-black-off-white__0216254_pe371443_s5.jpg",
+          "alt": "STOCKHOLM Rug, flatwoven, handmade/striped black/off-white, 5'7\"x7'10\"",
+          "variant_ids": [8001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/stockholm-rug-flatwoven-handmade-striped-black-off-white__0216255_pe371444_s5.jpg",
+          "alt": "",
+          "variant_ids": [8001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/stockholm-rug-flatwoven-handmade-striped-black-off-white__0836094_pe371445_s5.jpg",
+          "alt": "STOCKHOLM Rug detail",
+          "variant_ids": [8001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8001,
+          "title": "Black/off-white / 5'7\"x7'10\"",
+          "available": true,
+          "option1": "Black/off-white",
+          "option2": "5'7\"x7'10\"",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "GURLI Throw",
+      "handle": "gurli-throw-gray",
+      "product_type": "Throws",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/gurli-throw-gray__0667853_pe714027_s5.jpg",
+          "alt": "GURLI Throw, gray, 47x71\"",
+          "variant_ids": [8002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/gurli-throw-gray__0667854_pe714028_s5.jpg",
+          "alt": "",
+          "variant_ids": [8002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/gurli-throw-gray__0667855_pe714029_s5.jpg",
+          "alt": "",
+          "variant_ids": [8002]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8002,
+          "title": "Gray",
+          "available": true,
+          "option1": "Gray",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 8003,
+          "title": "Mustard yellow",
+          "available": true,
+          "option1": "Mustard yellow",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SANELA Cushion cover",
+      "handle": "sanela-cushion-cover-dark-blue",
+      "product_type": "Cushion covers",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sanela-cushion-cover-dark-blue__0740210_pe741932_s5.jpg",
+          "alt": "SANELA Cushion cover, dark blue, 20x20\"",
+          "variant_ids": [8004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sanela-cushion-cover-dark-blue__0740211_pe741933_s5.jpg",
+          "alt": "",
+          "variant_ids": [8004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/sanela-cushion-cover-dark-blue__0740212_pe741934_s5.jpg",
+          "alt": "",
+          "variant_ids": [8004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8004,
+          "title": "Dark blue",
+          "available": true,
+          "option1": "Dark blue",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 8005,
+          "title": "Golden-brown",
+          "available": true,
+          "option1": "Golden-brown",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 8006,
+          "title": "Dark green",
+          "available": true,
+          "option1": "Dark green",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "DVALA Duvet cover and pillowcase(s)",
+      "handle": "dvala-duvet-cover-and-pillowcases-white",
+      "product_type": "Duvet covers",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/dvala-duvet-cover-and-pillowcase-s-white__0577921_pe669127_s5.jpg",
+          "alt": "DVALA Duvet cover and pillowcase(s), white, Full/Queen",
+          "variant_ids": [8007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/dvala-duvet-cover-and-pillowcase-s-white__0577922_pe669128_s5.jpg",
+          "alt": "",
+          "variant_ids": [8007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/dvala-duvet-cover-and-pillowcase-s-white__0577923_pe669129_s5.jpg",
+          "alt": "",
+          "variant_ids": [8007]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8007,
+          "title": "White / Full/Queen",
+          "available": true,
+          "option1": "White",
+          "option2": "Full/Queen",
+          "option3": null
+        },
+        {
+          "id": 8008,
+          "title": "White / King",
+          "available": true,
+          "option1": "White",
+          "option2": "King",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "MAJGULL Blackout curtains, 1 pair",
+      "handle": "majgull-blackout-curtains-1-pair-gray",
+      "product_type": "Curtains",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/majgull-blackout-curtains-1-pair-gray__0680649_pe720208_s5.jpg",
+          "alt": "MAJGULL Blackout curtains, 1 pair, gray, 57x98\"",
+          "variant_ids": [8009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/majgull-blackout-curtains-1-pair-gray__0680650_pe720209_s5.jpg",
+          "alt": "",
+          "variant_ids": [8009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/majgull-blackout-curtains-1-pair-gray__0680651_pe720210_s5.jpg",
+          "alt": "",
+          "variant_ids": [8009]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8009,
+          "title": "Gray",
+          "available": true,
+          "option1": "Gray",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 8010,
+          "title": "Dark blue",
+          "available": true,
+          "option1": "Dark blue",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "VINDUM Rug, high pile",
+      "handle": "vindum-rug-high-pile-white",
+      "product_type": "Rugs",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/vindum-rug-high-pile-white__0604279_pe680898_s5.jpg",
+          "alt": "VINDUM Rug, high pile, white, 5'7\"x7'7\"",
+          "variant_ids": [8011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/vindum-rug-high-pile-white__0604280_pe680899_s5.jpg",
+          "alt": "",
+          "variant_ids": [8011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/vindum-rug-high-pile-white__0604281_pe680900_s5.jpg",
+          "alt": "VINDUM Rug texture detail",
+          "variant_ids": [8011]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8011,
+          "title": "White / 5'7\"x7'7\"",
+          "available": true,
+          "option1": "White",
+          "option2": "5'7\"x7'7\"",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "LUDDROS Mattress protector",
+      "handle": "luddros-mattress-protector",
+      "product_type": "Mattress protectors",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/luddros-mattress-protector__0606637_pe682320_s5.jpg",
+          "alt": "LUDDROS Mattress protector, Queen",
+          "variant_ids": [8012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/luddros-mattress-protector__0606638_pe682321_s5.jpg",
+          "alt": "",
+          "variant_ids": [8012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/luddros-mattress-protector__0606639_pe682322_s5.jpg",
+          "alt": "",
+          "variant_ids": [8012]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8012,
+          "title": "Queen",
+          "available": true,
+          "option1": "Queen",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 8013,
+          "title": "King",
+          "available": true,
+          "option1": "King",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "UPPLAND Rug, flatwoven",
+      "handle": "uppland-rug-flatwoven-indoor-outdoor-beige",
+      "product_type": "Rugs",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/uppland-rug-flatwoven-in-outdoor-beige__1056414_pe849620_s5.jpg",
+          "alt": "UPPLAND Rug, flatwoven, indoor/outdoor beige, 5'3\"x7'7\"",
+          "variant_ids": [8014]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/uppland-rug-flatwoven-in-outdoor-beige__1056415_pe849621_s5.jpg",
+          "alt": "",
+          "variant_ids": [8014]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/uppland-rug-flatwoven-in-outdoor-beige__1056416_pe849622_s5.jpg",
+          "alt": "",
+          "variant_ids": [8014]
+        }
+      ],
+      "variants": [
+        {
+          "id": 8014,
+          "title": "Beige",
+          "available": true,
+          "option1": "Beige",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

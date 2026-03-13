@@ -1,0 +1,251 @@
+{
+  "products": [
+    {
+      "title": "HEMNES / RÄTTVIKEN Bathroom vanity",
+      "handle": "hemnes-rattviken-bathroom-vanity-white",
+      "product_type": "Bathroom vanities",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-rattviken-bathroom-vanity-white__0549089_pe657818_s5.jpg",
+          "alt": "HEMNES / RÄTTVIKEN Bathroom vanity, white, 40 1/2\"",
+          "variant_ids": [7001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-rattviken-bathroom-vanity-white__0549090_pe657819_s5.jpg",
+          "alt": "",
+          "variant_ids": [7001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-rattviken-bathroom-vanity-white__0549091_pe657820_s5.jpg",
+          "alt": "HEMNES vanity drawer open",
+          "variant_ids": [7001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7001,
+          "title": "White / 40 1/2\"",
+          "available": true,
+          "option1": "White",
+          "option2": "40 1/2\"",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "GODMORGON Mirror cabinet with 2 doors",
+      "handle": "godmorgon-mirror-cabinet-with-2-doors",
+      "product_type": "Bathroom mirrors",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/godmorgon-mirror-cabinet-with-2-doors__0530977_pe647250_s5.jpg",
+          "alt": "GODMORGON Mirror cabinet with 2 doors, 31 1/2x5 1/2x37 3/4\"",
+          "variant_ids": [7002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/godmorgon-mirror-cabinet-with-2-doors__0530978_pe647251_s5.jpg",
+          "alt": "",
+          "variant_ids": [7002]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/godmorgon-mirror-cabinet-with-2-doors__0530979_pe647252_s5.jpg",
+          "alt": "GODMORGON cabinet open",
+          "variant_ids": [7002]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7002,
+          "title": "31 1/2\"",
+          "available": true,
+          "option1": "31 1/2\"",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "VOXNAN Shower set with thermostatic mixer",
+      "handle": "voxnan-shower-set-thermostatic-mixer-chrome-effect",
+      "product_type": "Shower fixtures",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/voxnan-shower-set-with-thermostatic-mixer-chrome-effect__0499063_pe630028_s5.jpg",
+          "alt": "VOXNAN Shower set with thermostatic mixer, chrome effect",
+          "variant_ids": [7003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/voxnan-shower-set-with-thermostatic-mixer-chrome-effect__0499064_pe630029_s5.jpg",
+          "alt": "",
+          "variant_ids": [7003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/voxnan-shower-set-with-thermostatic-mixer-chrome-effect__0499065_pe630030_s5.jpg",
+          "alt": "",
+          "variant_ids": [7003]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7003,
+          "title": "Chrome effect",
+          "available": true,
+          "option1": "Chrome effect",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SALVIKEN Bath towel",
+      "handle": "salviken-bath-towel-white",
+      "product_type": "Bath towels",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/salviken-bath-towel-white__0604087_pe680739_s5.jpg",
+          "alt": "SALVIKEN Bath towel, white, 28x55\"",
+          "variant_ids": [7004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/salviken-bath-towel-white__0604088_pe680740_s5.jpg",
+          "alt": "",
+          "variant_ids": [7004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/salviken-bath-towel-white__0604089_pe680741_s5.jpg",
+          "alt": "",
+          "variant_ids": [7004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7004,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 7005,
+          "title": "Anthracite",
+          "available": true,
+          "option1": "Anthracite",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "LILLÅNGEN High cabinet",
+      "handle": "lillangen-high-cabinet-white",
+      "product_type": "Bathroom storage",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lillangen-high-cabinet-white__0255197_pe399279_s5.jpg",
+          "alt": "LILLÅNGEN High cabinet, white, 11 3/4x15x70 1/2\"",
+          "variant_ids": [7006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lillangen-high-cabinet-white__0255198_pe399280_s5.jpg",
+          "alt": "",
+          "variant_ids": [7006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/lillangen-high-cabinet-white__0255199_pe399281_s5.jpg",
+          "alt": "",
+          "variant_ids": [7006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7006,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BROGRUND Shower shelf",
+      "handle": "brogrund-shower-shelf-stainless-steel",
+      "product_type": "Bathroom accessories",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/brogrund-shower-shelf-stainless-steel__0629893_pe694228_s5.jpg",
+          "alt": "BROGRUND Shower shelf, stainless steel, 9 1/2x4 3/4\"",
+          "variant_ids": [7007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/brogrund-shower-shelf-stainless-steel__0629894_pe694229_s5.jpg",
+          "alt": "",
+          "variant_ids": [7007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/brogrund-shower-shelf-stainless-steel__0629895_pe694230_s5.jpg",
+          "alt": "",
+          "variant_ids": [7007]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7007,
+          "title": "Stainless steel",
+          "available": true,
+          "option1": "Stainless steel",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "TOFTBO Bath mat",
+      "handle": "toftbo-bath-mat-dark-green",
+      "product_type": "Bath mats",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/toftbo-bath-mat-dark-green__0842671_pe780072_s5.jpg",
+          "alt": "TOFTBO Bath mat, dark green, 20x31\"",
+          "variant_ids": [7008]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/toftbo-bath-mat-dark-green__0842672_pe780073_s5.jpg",
+          "alt": "",
+          "variant_ids": [7008]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/toftbo-bath-mat-dark-green__0842673_pe780074_s5.jpg",
+          "alt": "",
+          "variant_ids": [7008]
+        }
+      ],
+      "variants": [
+        {
+          "id": 7008,
+          "title": "Dark green",
+          "available": true,
+          "option1": "Dark green",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 7009,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

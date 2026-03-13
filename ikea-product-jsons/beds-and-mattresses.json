@@ -1,0 +1,313 @@
+{
+  "products": [
+    {
+      "title": "MALM Bed frame, high",
+      "handle": "malm-bed-frame-high-white-luroey",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/malm-bed-frame-high-white-luroey__0749130_pe745499_s5.jpg",
+          "alt": "MALM Bed frame, high, white/Luröy, Queen",
+          "variant_ids": [2001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/malm-bed-frame-high-white-luroey__0637598_pe698416_s5.jpg",
+          "alt": "",
+          "variant_ids": [2001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/malm-bed-frame-high-white-luroey__0860720_pe698417_s5.jpg",
+          "alt": "",
+          "variant_ids": [2001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/malm-bed-frame-high-white-luroey__0860721_pe698418_s5.jpg",
+          "alt": "MALM Bed frame detail",
+          "variant_ids": [2001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2001,
+          "title": "White / Queen",
+          "available": true,
+          "option1": "White",
+          "option2": "Queen",
+          "option3": null
+        },
+        {
+          "id": 2002,
+          "title": "White / King",
+          "available": true,
+          "option1": "White",
+          "option2": "King",
+          "option3": null
+        },
+        {
+          "id": 2003,
+          "title": "White / Full",
+          "available": true,
+          "option1": "White",
+          "option2": "Full",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "HEMNES Bed frame",
+      "handle": "hemnes-bed-frame-white-stain-luroey",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-bed-frame-white-stain-luroey__0637516_pe698355_s5.jpg",
+          "alt": "HEMNES Bed frame, white stain/Luröy, Queen",
+          "variant_ids": [2004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-bed-frame-white-stain-luroey__0637517_pe698356_s5.jpg",
+          "alt": "",
+          "variant_ids": [2004]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-bed-frame-white-stain-luroey__0860683_pe698357_s5.jpg",
+          "alt": "",
+          "variant_ids": [2004]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2004,
+          "title": "White stain / Queen",
+          "available": true,
+          "option1": "White stain",
+          "option2": "Queen",
+          "option3": null
+        },
+        {
+          "id": 2005,
+          "title": "White stain / King",
+          "available": true,
+          "option1": "White stain",
+          "option2": "King",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BRIMNES Bed frame with storage",
+      "handle": "brimnes-bed-frame-with-storage-white-luroey",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/brimnes-bed-frame-with-storage-white-luroey__0637468_pe698326_s5.jpg",
+          "alt": "BRIMNES Bed frame with storage, white/Luröy, Queen",
+          "variant_ids": [2006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/brimnes-bed-frame-with-storage-white-luroey__0637469_pe698327_s5.jpg",
+          "alt": "",
+          "variant_ids": [2006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/brimnes-bed-frame-with-storage-white-luroey__0860647_pe698328_s5.jpg",
+          "alt": "BRIMNES storage drawers open",
+          "variant_ids": [2006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2006,
+          "title": "White / Queen",
+          "available": true,
+          "option1": "White",
+          "option2": "Queen",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "TARVA Bed frame",
+      "handle": "tarva-bed-frame-pine-luroey",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tarva-bed-frame-pine-luroey__0637611_pe698424_s5.jpg",
+          "alt": "TARVA Bed frame, pine/Luröy, Queen",
+          "variant_ids": [2007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tarva-bed-frame-pine-luroey__0637612_pe698425_s5.jpg",
+          "alt": "",
+          "variant_ids": [2007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/tarva-bed-frame-pine-luroey__0860755_pe698426_s5.jpg",
+          "alt": "",
+          "variant_ids": [2007]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2007,
+          "title": "Pine / Queen",
+          "available": true,
+          "option1": "Pine",
+          "option2": "Queen",
+          "option3": null
+        },
+        {
+          "id": 2008,
+          "title": "Pine / Full",
+          "available": true,
+          "option1": "Pine",
+          "option2": "Full",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "HAUGESUND Spring mattress",
+      "handle": "haugesund-spring-mattress-medium-firm-dark-beige",
+      "product_type": "Mattresses",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/haugesund-spring-mattress-medium-firm-dark-beige__0552469_pe658965_s5.jpg",
+          "alt": "HAUGESUND Spring mattress, medium firm/dark beige, Queen",
+          "variant_ids": [2009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/haugesund-spring-mattress-medium-firm-dark-beige__0552470_pe658966_s5.jpg",
+          "alt": "",
+          "variant_ids": [2009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/haugesund-spring-mattress-medium-firm-dark-beige__0552471_pe658967_s5.jpg",
+          "alt": "HAUGESUND mattress cross section",
+          "variant_ids": [2009]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2009,
+          "title": "Medium firm / Queen",
+          "available": true,
+          "option1": "Medium firm",
+          "option2": "Queen",
+          "option3": null
+        },
+        {
+          "id": 2010,
+          "title": "Medium firm / King",
+          "available": true,
+          "option1": "Medium firm",
+          "option2": "King",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "NESTTUN Bed frame",
+      "handle": "nesttun-bed-frame-white-luroey",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/nesttun-bed-frame-white-luroey__0637567_pe698389_s5.jpg",
+          "alt": "NESTTUN Bed frame, white/Luröy, Queen",
+          "variant_ids": [2011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/nesttun-bed-frame-white-luroey__0637568_pe698390_s5.jpg",
+          "alt": "",
+          "variant_ids": [2011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/nesttun-bed-frame-white-luroey__0860709_pe698391_s5.jpg",
+          "alt": "",
+          "variant_ids": [2011]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2011,
+          "title": "White / Queen",
+          "available": true,
+          "option1": "White",
+          "option2": "Queen",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BJÖRKUDDEN Bed frame",
+      "handle": "bjorkudden-bed-frame-birch",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/bjorkudden-bed-frame-birch__1169025_pe891789_s5.jpg",
+          "alt": "BJÖRKUDDEN Bed frame, birch, Queen",
+          "variant_ids": [2012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/bjorkudden-bed-frame-birch__1169026_pe891790_s5.jpg",
+          "alt": "",
+          "variant_ids": [2012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/bjorkudden-bed-frame-birch__1169027_pe891791_s5.jpg",
+          "alt": "",
+          "variant_ids": [2012]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2012,
+          "title": "Birch / Queen",
+          "available": true,
+          "option1": "Birch",
+          "option2": "Queen",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SLATTUM Upholstered bed frame",
+      "handle": "slattum-upholstered-bed-frame-knisa-light-gray",
+      "product_type": "Beds",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/slattum-upholstered-bed-frame-knisa-light-gray__0768244_pe753903_s5.jpg",
+          "alt": "SLATTUM Upholstered bed frame, Knisa light gray, Queen",
+          "variant_ids": [2013]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/slattum-upholstered-bed-frame-knisa-light-gray__0768245_pe753904_s5.jpg",
+          "alt": "",
+          "variant_ids": [2013]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/slattum-upholstered-bed-frame-knisa-light-gray__0860744_pe753905_s5.jpg",
+          "alt": "",
+          "variant_ids": [2013]
+        }
+      ],
+      "variants": [
+        {
+          "id": 2013,
+          "title": "Knisa light gray / Queen",
+          "available": true,
+          "option1": "Knisa light gray",
+          "option2": "Queen",
+          "option3": null
+        }
+      ]
+    }
+  ]
+}

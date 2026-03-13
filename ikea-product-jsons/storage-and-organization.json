@@ -1,0 +1,343 @@
+{
+  "products": [
+    {
+      "title": "KALLAX Shelf unit",
+      "handle": "kallax-shelf-unit-white",
+      "product_type": "Shelving units",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kallax-shelf-unit-white__0644757_pe702939_s5.jpg",
+          "alt": "KALLAX Shelf unit, white, 30 3/8x57 7/8\"",
+          "variant_ids": [3001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kallax-shelf-unit-white__0644758_pe702940_s5.jpg",
+          "alt": "",
+          "variant_ids": [3001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kallax-shelf-unit-white__0644759_pe702941_s5.jpg",
+          "alt": "KALLAX Shelf unit styled",
+          "variant_ids": [3001]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/kallax-shelf-unit-white__0836998_pe702942_s5.jpg",
+          "alt": "",
+          "variant_ids": [3001]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3001,
+          "title": "White / 4x2",
+          "available": true,
+          "option1": "White",
+          "option2": "4x2",
+          "option3": null
+        },
+        {
+          "id": 3002,
+          "title": "White / 4x4",
+          "available": true,
+          "option1": "White",
+          "option2": "4x4",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BILLY Bookcase",
+      "handle": "billy-bookcase-white",
+      "product_type": "Bookcases",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/billy-bookcase-white__0625599_pe692385_s5.jpg",
+          "alt": "BILLY Bookcase, white, 31 1/2x11x79 1/2\"",
+          "variant_ids": [3003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/billy-bookcase-white__0625600_pe692386_s5.jpg",
+          "alt": "",
+          "variant_ids": [3003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/billy-bookcase-white__0625601_pe692387_s5.jpg",
+          "alt": "",
+          "variant_ids": [3003]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/billy-bookcase-white__0836332_pe692388_s5.jpg",
+          "alt": "BILLY Bookcase detail",
+          "variant_ids": [3003]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3003,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 3004,
+          "title": "Black-brown",
+          "available": true,
+          "option1": "Black-brown",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 3005,
+          "title": "Oak veneer",
+          "available": true,
+          "option1": "Oak veneer",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "PAX Wardrobe",
+      "handle": "pax-wardrobe-white",
+      "product_type": "Wardrobes",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/pax-wardrobe-white__0558176_pe661558_s5.jpg",
+          "alt": "PAX Wardrobe, white, 59x22 7/8x79 1/4\"",
+          "variant_ids": [3006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/pax-wardrobe-white__0558177_pe661559_s5.jpg",
+          "alt": "",
+          "variant_ids": [3006]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/pax-wardrobe-white__0558178_pe661560_s5.jpg",
+          "alt": "PAX Wardrobe interior",
+          "variant_ids": [3006]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3006,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "ALEX Drawer unit",
+      "handle": "alex-drawer-unit-white",
+      "product_type": "Drawer units",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/alex-drawer-unit-white__0604700_pe681073_s5.jpg",
+          "alt": "ALEX Drawer unit, white, 14 1/8x27 1/2\"",
+          "variant_ids": [3007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/alex-drawer-unit-white__0604701_pe681074_s5.jpg",
+          "alt": "",
+          "variant_ids": [3007]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/alex-drawer-unit-white__0604702_pe681075_s5.jpg",
+          "alt": "ALEX Drawer unit open drawer",
+          "variant_ids": [3007]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3007,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        },
+        {
+          "id": 3008,
+          "title": "Blue",
+          "available": true,
+          "option1": "Blue",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "HEMNES Chest of 8 drawers",
+      "handle": "hemnes-chest-of-8-drawers-white-stain",
+      "product_type": "Chest of drawers",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-chest-of-8-drawers-white-stain__0627074_pe692791_s5.jpg",
+          "alt": "HEMNES Chest of 8 drawers, white stain, 63x37 3/8\"",
+          "variant_ids": [3009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-chest-of-8-drawers-white-stain__0627075_pe692792_s5.jpg",
+          "alt": "",
+          "variant_ids": [3009]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/hemnes-chest-of-8-drawers-white-stain__0627076_pe692793_s5.jpg",
+          "alt": "",
+          "variant_ids": [3009]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3009,
+          "title": "White stain",
+          "available": true,
+          "option1": "White stain",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "TROFAST Storage combination",
+      "handle": "trofast-storage-combination-white-white",
+      "product_type": "Children's storage",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/trofast-storage-combination-white-white__0710712_pe727118_s5.jpg",
+          "alt": "TROFAST Storage combination, white/white",
+          "variant_ids": [3010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/trofast-storage-combination-white-white__0710713_pe727119_s5.jpg",
+          "alt": "",
+          "variant_ids": [3010]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/trofast-storage-combination-white-white__0710714_pe727120_s5.jpg",
+          "alt": "",
+          "variant_ids": [3010]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3010,
+          "title": "White/White",
+          "available": true,
+          "option1": "White",
+          "option2": "White bins",
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "BESTA TV unit",
+      "handle": "besta-tv-unit-white",
+      "product_type": "TV & media storage",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/besta-tv-unit-white__0606935_pe682498_s5.jpg",
+          "alt": "BESTÅ TV unit, white, 47 1/4x15 3/4x25 1/4\"",
+          "variant_ids": [3011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/besta-tv-unit-white__0606936_pe682499_s5.jpg",
+          "alt": "",
+          "variant_ids": [3011]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/besta-tv-unit-white__0606937_pe682500_s5.jpg",
+          "alt": "",
+          "variant_ids": [3011]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3011,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "IVAR Shelving unit",
+      "handle": "ivar-shelving-unit-pine",
+      "product_type": "Shelving units",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ivar-shelving-unit-pine__0294636_pe332497_s5.jpg",
+          "alt": "IVAR Shelving unit, pine, 35x19 5/8x70 1/2\"",
+          "variant_ids": [3012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ivar-shelving-unit-pine__0294637_pe332498_s5.jpg",
+          "alt": "",
+          "variant_ids": [3012]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/ivar-shelving-unit-pine__0836080_pe332499_s5.jpg",
+          "alt": "IVAR Shelving unit styled",
+          "variant_ids": [3012]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3012,
+          "title": "Pine",
+          "available": true,
+          "option1": "Pine",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    },
+    {
+      "title": "SKUBB Storage case",
+      "handle": "skubb-storage-case-white",
+      "product_type": "Storage boxes & baskets",
+      "available": true,
+      "images": [
+        {
+          "src": "https://www.ikea.com/us/en/images/products/skubb-storage-case-white__0394155_pe561730_s5.jpg",
+          "alt": "SKUBB Storage case, white, 17 1/4x21 5/8x7 1/2\"",
+          "variant_ids": [3013]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/skubb-storage-case-white__0394156_pe561731_s5.jpg",
+          "alt": "",
+          "variant_ids": [3013]
+        },
+        {
+          "src": "https://www.ikea.com/us/en/images/products/skubb-storage-case-white__0394157_pe561732_s5.jpg",
+          "alt": "",
+          "variant_ids": [3013]
+        }
+      ],
+      "variants": [
+        {
+          "id": 3013,
+          "title": "White",
+          "available": true,
+          "option1": "White",
+          "option2": null,
+          "option3": null
+        }
+      ]
+    }
+  ]
+}
