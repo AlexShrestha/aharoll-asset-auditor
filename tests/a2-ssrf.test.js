@@ -7,10 +7,13 @@ const { default: analyzeHandler } = await import('../api/analyze.js');
 const { default: fetchProductsHandler } = await import('../api/fetch-products.js');
 const { default: queueAuditHandler } = await import('../api/queue-audit.js');
 
+import { resetRateLimits } from '../lib/rate-limit.js';
+
 const KEY = 'test-audit-key-0123456789';
 
 let restoreEnv;
 beforeEach(() => {
+  resetRateLimits();
   restoreEnv = snapshotEnv();
   clearEnv();
   process.env.AUDIT_API_KEY = KEY;
