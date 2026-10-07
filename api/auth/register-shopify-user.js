@@ -1,5 +1,6 @@
 import { requireApiKey } from '../../lib/auth.js';
 import { registerShopifyUser } from '../../lib/platform.js';
+import { sendError } from '../../lib/http.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -12,6 +13,6 @@ export default async function handler(req, res) {
     const result = await registerShopifyUser(req.body || {});
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return sendError(res, error, 'register-shopify-user');
   }
 }

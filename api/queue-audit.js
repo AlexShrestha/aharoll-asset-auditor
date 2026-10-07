@@ -1,5 +1,6 @@
 import { requireApiKey } from '../lib/auth.js';
 import { createAuditJob } from '../lib/queue.js';
+import { sendError } from '../lib/http.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -23,6 +24,6 @@ export default async function handler(req, res) {
       createdAt: job.created_at,
     });
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return sendError(res, error, 'queue-audit');
   }
 }

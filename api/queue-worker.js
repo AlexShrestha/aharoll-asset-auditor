@@ -1,5 +1,6 @@
 import { requireWorkerToken } from '../lib/auth.js';
 import { processQueueBatch } from '../lib/queue.js';
+import { sendError } from '../lib/http.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -14,6 +15,6 @@ export default async function handler(req, res) {
     const result = await processQueueBatch({ batchSize });
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return sendError(res, error, 'queue-worker');
   }
 }

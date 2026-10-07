@@ -1,5 +1,6 @@
 import { requireAdminSession } from '../lib/admin-session.js';
 import { getAuditJobDetail } from '../lib/queue.js';
+import { sendError } from '../lib/http.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -27,6 +28,6 @@ export default async function handler(req, res) {
 
     return res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    return sendError(res, error, 'admin-job');
   }
 }

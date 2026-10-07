@@ -1,4 +1,5 @@
 import { clearAdminSessionHeaders, createAdminSessionHeaders, isAdminAuthenticated, verifyAdminKey } from '../lib/admin-session.js';
+import { sendError } from '../lib/http.js';
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
@@ -16,7 +17,7 @@ export default async function handler(req, res) {
       res.setHeader('Set-Cookie', createAdminSessionHeaders()['Set-Cookie']);
       return res.status(200).json({ authenticated: true });
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return sendError(res, error, 'admin-session');
     }
   }
 

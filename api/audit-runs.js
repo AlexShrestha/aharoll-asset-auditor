@@ -1,5 +1,6 @@
 import { requireApiKey } from '../lib/auth.js';
 import { createPlatformAuditRun, getPlatformAuditRun } from '../lib/platform.js';
+import { sendError } from '../lib/http.js';
 
 export default async function handler(req, res) {
   if (!requireApiKey(req, res)) return;
@@ -31,7 +32,7 @@ export default async function handler(req, res) {
       });
       return res.status(202).json(result);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return sendError(res, error, 'audit-runs');
     }
   }
 
@@ -46,7 +47,7 @@ export default async function handler(req, res) {
       if (!result) return res.status(404).json({ error: 'Audit run not found' });
       return res.status(200).json(result);
     } catch (error) {
-      return res.status(500).json({ error: error.message });
+      return sendError(res, error, 'audit-runs');
     }
   }
 
