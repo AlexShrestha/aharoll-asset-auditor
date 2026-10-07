@@ -1,5 +1,7 @@
 import { requireApiKey } from '../lib/auth.js';
 import { createAuditJob } from '../lib/queue.js';
+import { assertSafeCallbackUrl } from '../lib/safe-fetch.js';
+import { assertSafeStoreUrl } from '../lib/shopify-products.js';
 import { sendError } from '../lib/http.js';
 
 export default async function handler(req, res) {
@@ -15,6 +17,9 @@ export default async function handler(req, res) {
   }
 
   try {
+    // Reject URLs the worker would later refuse to fetch (private hosts, http, odd ports) up front.
+    assertSafeStoreUrl(storeUrl);
+    if (callbackUrl) assertSafeCallbackUrl(callbackUrl);
     const job = await createAuditJob({ storeUrl, category, callbackUrl, callbackToken, metadata });
     return res.status(202).json({
       jobId: job.id,

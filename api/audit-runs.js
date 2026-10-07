@@ -1,4 +1,5 @@
 import { requireApiKey } from '../lib/auth.js';
+import { assertSafeCallbackUrl } from '../lib/safe-fetch.js';
 import { createPlatformAuditRun, getPlatformAuditRun } from '../lib/platform.js';
 import { sendError } from '../lib/http.js';
 
@@ -21,6 +22,7 @@ export default async function handler(req, res) {
     }
 
     try {
+      if (callbackUrl) assertSafeCallbackUrl(callbackUrl);
       const result = await createPlatformAuditRun({
         workspaceId,
         storeId,
