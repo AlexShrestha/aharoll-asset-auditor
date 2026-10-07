@@ -202,71 +202,9 @@ export default function App() {
     } catch (e) { setError(e.message) }
   }
 
-  // Classify variant dimension as visual or non-visual
-  const classifyVariantDimension = (optionName) => {
-    if (!optionName) return 'non_visual_variant'
-    const lower = optionName.toLowerCase()
-    const sizePatterns = /^(xx?[sl]|[sl]|m|xx?l|2xl|3xl|4xl|5xl|\d+|\d+\/\d+|one size|os|regular|petite|tall|short|long)$/
-    if (sizePatterns.test(lower)) return 'non_visual_variant'
-    const sizeWords = ['size', 'length', 'width', 'inseam', 'waist']
-    if (sizeWords.some(w => lower.includes(w))) return 'non_visual_variant'
-    return 'visual_variant'
-  }
-
-  const analyze = async () => {
-    setPhase('analyzing'); abortRef.current = false; accRef.current = []
-    const multi = filteredProducts.filter(p => p.images?.length > 1)
-    setProgress({ current: 0, total: multi.length, status: 'Starting...' })
-
-    if (!multi.length) { setError('No products with multiple images.'); setPhase('loaded'); return }
-
-    for (let i = 0; i < multi.length; i++) {
-      if (abortRef.current) break
-      const product = multi[i]
-      setProgress({ current: i + 1, total: multi.length, status: `Analyzing: ${product.title.slice(0, 50)}...` })
-
-      try {
-        // Filter to only available variants (strict: must be explicitly true)
-        const availableVariants = (product.variants || []).filter(v => v.available === true)
-        const variantData = availableVariants.map(v => {
-          const dim = classifyVariantDimension(v.option1)
-          return {
-            title: v.title, option1: v.option1, option2: v.option2, option3: v.option3,
-            dimension: dim,
-            imageIndexes: product.images
-              ?.map((img, idx) => img.variant_ids?.includes(v.id) ? idx : null)
-              .filter(i => i !== null),
-          }
-        }) || []
-
-        const imageAlts = product.images?.slice(0, 10).map(img => img.alt || '') || []
-        const imageFilenames = product.images?.slice(0, 10).map(img => {
-          try { return new URL(img.src).pathname.split('/').pop() } catch { return '' }
-        }) || []
-
-        const res = await fetch('/api/analyze', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: product.title,
-            productUrl: getProductUrl(storeUrl, product),
-            imageUrls: product.images.slice(0, 10).map(img => img.src),
-            variants: variantData.length > 1 ? variantData : undefined,
-            productType: product.product_type || undefined,
-            imageAlts,
-            imageFilenames,
-          }),
-        })
-        const data = await res.json()
-        if (!res.ok) throw new Error(data.error || 'Analysis failed')
-        accRef.current = [...accRef.current, { product, analysis: data }]
-      } catch (e) {
-        accRef.current = [...accRef.current, { product, error: e.message }]
-      }
-      setResults([...accRef.current])
-      if (i < multi.length - 1 && !abortRef.current) await new Promise(r => setTimeout(r, BATCH_DELAY))
-    }
-    setPhase('results')
-  }
+  // Analysis needs the server-side AUDIT_API_KEY, which must never ship to the browser.
+  // The public UI therefore only previews products; analysis runs from the Shopify app.
+  const ANALYSIS_NOTICE = 'Analysis is available in the AhaRoll Shopify app.'
 
   const stop = () => { abortRef.current = true; setPhase('results') }
   const reset = () => { setProducts([]); setCategory('all'); setPhase('input'); setResults([]); setProgress({ current: 0, total: 0, status: '' }); setError(''); accRef.current = [] }
@@ -725,9 +663,10 @@ export default function App() {
                 </a>
               ))}
             </div>
-            <button onClick={analyze} style={{ width: '100%', ...btn, padding: '16px', background: 'linear-gradient(135deg, #581c87, #7c3aed)', color: '#fff', fontSize: 16, fontWeight: 700 }}>
+            <button disabled aria-disabled="true" title={ANALYSIS_NOTICE} style={{ width: '100%', ...btn, padding: '16px', background: '#27272a', color: '#a1a1aa', fontSize: 16, fontWeight: 700, cursor: 'not-allowed' }}>
               Run {category === 'all' ? 'Full' : category} Audit
             </button>
+            <div style={{ marginTop: 10, textAlign: 'center', fontSize: 13, color: '#a1a1aa' }}>{ANALYSIS_NOTICE}</div>
             {error && <div style={errorBox}>{error}</div>}
           </div>
         )}
